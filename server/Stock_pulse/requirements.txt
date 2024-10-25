@@ -1,0 +1,4 @@
+Django
+djangorestframework
+PyJWT
+django-cors-headers
