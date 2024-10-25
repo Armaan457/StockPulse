@@ -7,19 +7,25 @@ interface Message {
 	message: string;
 }
 
+interface ChatMessage {
+	message: string;
+	type: "sender" | "receiver";
+}
+
 // JSON.parse(localStorage.getItem("user")!).username;
 
 const ChatPage: React.FC = () => {
 	const endOfChatRef = useRef<HTMLDivElement | null>(null);
 	const { open } = useSidebar();
-	const [messages, setMessages] = useState<Message[]>([]);
+	const [messages, setMessages] = useState<ChatMessage[]>([]);
 	const [input, setInput] = useState<string>("");
 	const [socket, setSocket] = useState<WebSocket | null>(null);
 
 	const handleSendMessage = () => {
 		if (socket && input.trim()) {
-			const newMessage: Message = { message: input };
-			socket.send(JSON.stringify(newMessage));
+			const inputMessage: Message = { message: input };
+			const newMessage: ChatMessage = { message: input, type: "sender" };
+			socket.send(JSON.stringify(inputMessage));
 			setMessages((messages) => [...messages, newMessage]);
 			setInput("");
 		}
@@ -33,7 +39,10 @@ const ChatPage: React.FC = () => {
 		socketInstance.onmessage = function (event) {
 			console.log("Message from server ", event.data);
 			const data = JSON.parse(event.data);
-			const newMessage: Message = { message: data.message };
+			const newMessage: ChatMessage = {
+				message: data.message,
+				type: "receiver",
+			};
 			setMessages((prevMessages) => [...prevMessages, newMessage]);
 		};
 
@@ -70,24 +79,13 @@ const ChatPage: React.FC = () => {
 		>
 			<div className="flex flex-col justify-center h-full w-full p-4">
 				<div className="flex flex-col-reverse flex-1 overflow-y-auto mb-4 p-4 bg-gray-100 rounded shadow">
-					{/* {messages.map((message, index) => (
-						<div
-							key={index}
-							className="mb-2"
-						>
-							<strong>{message.user}:</strong> {message.text}
-						</div>
-					))} */}
-					<div className="bg-stone-700 p-4 w-3/4 rounded-lg mb-2 max-w-max self-end">
-						<p className="text-base text-white break-words">
-							{"message"}
-						</p>
-					</div>
-					<div className="bg-gray-200 p-4 w-3/4 rounded-lg mb-2 max-w-max self-start">
-						<p className="text-base text-gray-900 break-words">
-							{"message"}
-						</p>
-					</div>
+					{messages.map((message, index) => (
+						<Message
+							message={message.message}
+							type={message.type}
+							key={message.message.length * index}
+						/>
+					))}
 					<div ref={endOfChatRef} />
 				</div>
 				<div className="flex">
