@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import requests
 import os
@@ -7,6 +8,14 @@ from dotenv import load_dotenv
 load_dotenv()
 app = FastAPI()
 ONDEMAND_API_KEY = os.getenv('ONDEMAND_API_KEY')
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  
+    allow_credentials=True,
+    allow_methods=["*"],  
+    allow_headers=["*"], 
+)
 
 # In-memory store for user sessions
 user_sessions = {}
@@ -61,7 +70,8 @@ async def create_chat_session_and_query(request: QueryRequest):
                 "plugin-1728287833",
                 "plugin-1726253762",
                 "plugin-1716429542",
-                "plugin-1716434059"
+                "plugin-1716434059",
+                "plugin-1728314839"
             ],
             "responseMode": "sync"
         }
