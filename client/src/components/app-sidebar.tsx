@@ -67,7 +67,12 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	return (
-		<Sidebar {...props}>
+		<Sidebar
+			{...props}
+			variant="floating"
+			collapsible="offcanvas"
+			side="left"
+		>
 			<SidebarHeader>
 				<SidebarMenu>
 					<SidebarMenuItem>

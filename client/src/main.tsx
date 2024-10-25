@@ -9,6 +9,7 @@ import Layout from "./LandingLayout.tsx";
 import Error from "./Pages/Error.tsx";
 import YoutubeCarousal from "./Pages/YoutubeCarousal.tsx";
 import LineGraph from "./Part/LineGraph/LineGraph.tsx";
+import ChatPage from "./Pages/ChatPage/ChatPage.tsx";
 // import Page from "./app/dashboard/page.tsx";
 
 const router = createBrowserRouter([
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
 			{
 				path: "line-graph",
 				element: <LineGraph />,
+			},
+			{
+				path: "chatPage",
+				element: <ChatPage />,
 			},
 		],
 	},
