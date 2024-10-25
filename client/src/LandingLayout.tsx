@@ -6,7 +6,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { Outlet } from "react-router-dom";
 
 export default function Layout() {
-	const [OpenChat, setOpenChat] = useState<boolean>(false);
+	const [openChat, setOpenChat] = useState<boolean>(false);
 
 	const propFnc = () => {
 		setOpenChat(false);
@@ -18,14 +18,25 @@ export default function Layout() {
 				<SidebarTrigger />
 				<Outlet />
 			</main>
-			<div className="fixed bottom-[5%] right-[3%] h-[90vh] w-[480px] z-[2000]">
-				{OpenChat && <ChatBot propFnc={propFnc} />}
-				{!OpenChat && (
-					<img
-						src={bot}
+			<div
+				className={`fixed bottom-[5%] right-[3%] h-[90vh] w-[480px] z-[2000] ${
+					!openChat ? "h-0 w-0" : ""
+				}`}
+			>
+				{openChat && (
+					<ChatBot
+						propFnc={propFnc}
+						OpenChat={openChat}
+					/>
+				)}
+				{!openChat && (
+					<button
 						onClick={() => setOpenChat(true)}
-						alt="Chatbot Icon"
-						className="fixed bottom-[5%] right-[3%] h-[50px] w-[50px] z-[2000] cursor-pointer"
+						aria-label="Open Chatbot"
+						className="fixed bottom-[5%] right-[3%] h-[50px] w-[50px] z-[2000] cursor-pointer bg-no-repeat bg-center bg-contain"
+						style={{
+							backgroundImage: `url(${bot})`,
+						}}
 					/>
 				)}
 			</div>
