@@ -2,27 +2,24 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { Component } from "./App.tsx";
-import Navbar from "./Pages/Navbar";
-import Landing from "./Pages/Landing";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
+import MainLandingPage from "./MainLandingPage.tsx";
 import News from "./Pages/News";
 import Layout from "./LandingLayout.tsx";
 import Error from "./Pages/Error.tsx";
 import YoutubeCarousal from "./Pages/YoutubeCarousal.tsx";
+import LineGraph from "./Part/LineGraph/LineGraph.tsx";
 // import Page from "./app/dashboard/page.tsx";
 
 const router = createBrowserRouter([
 	{
 		path: "/",
 		errorElement: <Error />,
-
-		element: (
-			<div className="bg-stone-100 min-h-screen">
-				<Navbar />
-				<Landing />
-			</div>
-		),
+		element: <MainLandingPage />,
+	},
+	{
+		path: "/line-graph",
+		element: <LineGraph />,
 	},
 	{
 		path: "/pulse",
@@ -40,6 +37,10 @@ const router = createBrowserRouter([
 			{
 				path: "yt-c",
 				element: <YoutubeCarousal />,
+			},
+			{
+				path: "line-graph",
+				element: <LineGraph />,
 			},
 		],
 	},

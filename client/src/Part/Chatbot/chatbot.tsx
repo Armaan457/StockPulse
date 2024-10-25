@@ -17,50 +17,10 @@ const ChatBot: React.FC<{ propFnc: () => void; OpenChat: boolean }> = ({
 }) => {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [input, setInput] = useState<string>("");
-	const [socket, setSocket] = useState<WebSocket | null>(null);
 
-	const handleSendMessage = () => {
-		if (socket && input) {
-			socket.send(
-				JSON.stringify({
-					message: input,
-				}),
-			);
-			setMessages((prev) => [...prev, { text: input, sender: "user" }]);
-			setInput("");
-		}
-	};
+	const handleSendMessage = () => {};
 
-	useEffect(() => {
-		const wsServer = import.meta.env.VITE_WS_HOST;
-		const socketInstance = new WebSocket(wsServer);
-		setSocket(socketInstance);
-
-		socketInstance.onmessage = function (event) {
-			console.log("Message from server ", event.data);
-			const data = JSON.parse(event.data);
-			setMessages((prevMessages) => [
-				...prevMessages,
-				{ text: data.message, sender: "bot" },
-			]);
-		};
-
-		socketInstance.onerror = function (event) {
-			console.log("Error ", event);
-		};
-
-		socketInstance.onopen = function (event) {
-			console.log("Connected to server ", event);
-		};
-
-		socketInstance.onclose = function (event) {
-			console.log("Disconnected from server ", event);
-		};
-
-		return () => {
-			socketInstance.close();
-		};
-	}, []);
+	useEffect(() => {});
 
 	return (
 		<div
@@ -69,10 +29,6 @@ const ChatBot: React.FC<{ propFnc: () => void; OpenChat: boolean }> = ({
 		>
 			<div className={styles.header}>
 				<div>
-					{/* <img
-						src={bot}
-						alt="chatBot"
-					/> */}
 					<BotMessageSquare
 						color="white"
 						size={"30px"}
