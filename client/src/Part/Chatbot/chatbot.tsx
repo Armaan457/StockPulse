@@ -25,15 +25,16 @@ const ChatBot: React.FC<{ propFnc: () => void; OpenChat: boolean }> = ({
 	const [input, setInput] = useState<string>("");
 
 	const handleSendMessage = async () => {
-		const obj: Message = {
+		const objFromUser: Message = {
 			text: input,
 			sender: "user",
 		};
 
-		setMessages((prev) => [...prev, obj]);
+		setMessages((prev) => [...prev, objFromUser]);
+		setInput("");
 
 		const objToSend = {
-			external_user_id: JSON.parse(localStorage.getItem("user")!).username,
+			external_user_id:  JSON.parse(localStorage.getItem("user")!).username,
 			query: input,
 		};
 
@@ -41,22 +42,33 @@ const ChatBot: React.FC<{ propFnc: () => void; OpenChat: boolean }> = ({
 			const response: AxiosResponse<ChatResponse> = await axios.post(
 				"http://localhost:8000/chat",
 				objToSend,
+				{
+					timeout : 50 * 1000, // 50 sec
+				}
 			);
 
-			// Check if response was successful and update the message accordingly
 			if (response.data.success) {
-				obj.text = response.data.answer;
+				const objectReceived : Message = {
+					text: response.data.answer,
+					sender: "bot",
+				}
+				setMessages((prev) => [...prev, objectReceived]);
 			} else {
-				obj.text = "ERROR: Unable to get a valid response.";
+				const objectReceived : Message = {
+					text: "ERROR: Unable to get a valid response.",
+					sender: "bot",
+				}
+				setMessages((prev) => [...prev, objectReceived]);
+
 			}
 		} catch (error) {
 			console.error("Error sending message:", error);
-			obj.text = "ERROR: Something went wrong.";
-		} finally {
-			// Update state with bot response
-			obj.sender = "bot";
-			setMessages((prev) => [...prev, obj]);
-		}
+			const objectReceived : Message = {
+				text: "ERROR: Something went wrong.",
+				sender: "bot",
+			}
+			setMessages((prev) => [...prev, objectReceived]);
+		} 
 	};
 
 	return (
