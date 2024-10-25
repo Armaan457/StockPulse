@@ -16,12 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from InvestmentSection.views import PortfolioPerformanceView , MovingAveragesView , TopStocksView
+from InvestmentSection.views import PortfolioPerformanceView , MovingAveragesView , TopStocksView , Top
 
 urlpatterns = [
     path('api/', include('api.urls')),
     path('admin/', admin.site.urls),
     path('bacltesting/' , PortfolioPerformanceView.as_view()),
     path('Movingaverages/' , MovingAveragesView.as_view()),
-    path("top-stocks/" , TopStocksView.as_view())
+    path("top-stocks/" , TopStocksView.as_view()),
+    path("top/" , Top.as_view())
 ]
