@@ -73,7 +73,7 @@ const ChatPage: React.FC = () => {
 
 	return (
 		<div
-			className={`grid place-items-center h-[96vh] ${
+			className={`grid place-items-center h-[93vh] overflow-hidden ${
 				open ? "w-[82vw]" : "w-screen"
 			}`}
 		>
