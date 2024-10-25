@@ -1,44 +1,37 @@
-const [socket, setSocket] = useState<WebSocket | null>(null);
+<Carousel
+				className=" mx-20"
+				opts={{
+					align: "center",
+					loop: true,
+				}}
+				plugins={[
+					Autoplay({
+						delay: 4000,
+						stopOnMouseEnter: true,
+						stopOnInteraction: false,
+					}),
+				]}
+			>
+				<CarouselPrevious />
+				<CarouselContent>
+					{arr.map((item: JSX.Element, index: number) => (
+						<CarouselItem
+							key={index + item.type.name}
+							className="max-w-lg flex-shrink-0"
+						>
+							{item}
+						</CarouselItem>
+					))}
+				</CarouselContent>
+				<CarouselNext />
+			</Carousel>
 
-	const handleSendMessage = () => {
-		if (socket && input) {
-			socket.send(
-				JSON.stringify({
-					message: input,
-				}),
-			);
-			setMessages((prev) => [...prev, { text: input, sender: "user" }]);
-			setInput("");
-		}
-	};
 
-	useEffect(() => {
-		const wsServer = import.meta.env.VITE_WS_HOST;
-		const socketInstance = new WebSocket(wsServer);
-		setSocket(socketInstance);
-
-		socketInstance.onmessage = function (event) {
-			console.log("Message from server ", event.data);
-			const data = JSON.parse(event.data);
-			setMessages((prevMessages) => [
-				...prevMessages,
-				{ text: data.message, sender: "bot" },
-			]);
-		};
-
-		socketInstance.onerror = function (event) {
-			console.log("Error ", event);
-		};
-
-		socketInstance.onopen = function (event) {
-			console.log("Connected to server ", event);
-		};
-
-		socketInstance.onclose = function (event) {
-			console.log("Disconnected from server ", event);
-		};
-
-		return () => {
-			socketInstance.close();
-		};
-	}, []);
+			const arr: JSX.Element[] = [
+	<Component key="component-1" />,
+	<Component key="component-2" />,
+	<Component key="component-3" />,
+	<Component key="component-4" />,
+	<Component key="component-5" />,
+	<Component key="component-6" />,
+];
