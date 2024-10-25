@@ -18,15 +18,15 @@ const data = {
 	navMain: [
 		{
 			title: "News",
-			url: "#",
+			url: "/pulse",
 			items: [
 				{
 					title: "Newsletter",
-					url: "#",
+					url: "/pulse/component",
 				},
 				{
 					title: "Project Structure",
-					url: "#",
+					url: "/",
 				},
 			],
 		},

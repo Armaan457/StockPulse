@@ -1,10 +1,5 @@
 "use client";
 
-const color = {
-	green: "#18ab4c",
-	red: "#FF0000",
-};
-
 import { TrendingUp } from "lucide-react";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
