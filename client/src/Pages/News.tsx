@@ -4,11 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 
+interface NewsData {
+	companyName: string;
+}
+
 const News = () => {
 	const { open } = useSidebar();
-	const { register, handleSubmit } = useForm();
+	const { register, handleSubmit } = useForm<NewsData>();
 
-	const onSubmit = () => {};
+	const onSubmit = (data: NewsData) => {
+		console.log(data);
+	};
 
 	return (
 		<>
