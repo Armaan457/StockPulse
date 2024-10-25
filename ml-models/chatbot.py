@@ -63,15 +63,10 @@ async def create_chat_session_and_query(request: QueryRequest):
         submit_query_url = f'https://api.on-demand.io/chat/v1/sessions/{session_id}/query'
         submit_query_body = {
             "endpointId": "predefined-openai-gpt4o",
-            "query": request.query,
+            "query": request.query + "Answer only if the question is from stocks, commodities and trading, otherwise don't answer",
             "pluginIds": [
-                "plugin-1712327325",
-                "plugin-1713962163",
-                "plugin-1728287833",
-                "plugin-1726253762",
-                "plugin-1716429542",
-                "plugin-1716434059",
-                "plugin-1728314839"
+                        "plugin-1713962163", "plugin-1729875364", "plugin-1728287833",
+                        "plugin-1726253762", "plugin-1716429542", "plugin-1716434059"
             ],
             "responseMode": "sync"
         }
