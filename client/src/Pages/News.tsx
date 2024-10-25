@@ -11,12 +11,12 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 
 const arr: JSX.Element[] = [
-	<Component />,
-	<Component />,
-	<Component />,
-	<Component />,
-	<Component />,
-	<Component />,
+	<Component key="component-1" />,
+	<Component key="component-2" />,
+	<Component key="component-3" />,
+	<Component key="component-4" />,
+	<Component key="component-5" />,
+	<Component key="component-6" />,
 ];
 
 const News = () => {
@@ -29,7 +29,7 @@ const News = () => {
 			}}
 			plugins={[
 				Autoplay({
-					delay: 1000,
+					delay: 4000,
 					stopOnMouseEnter: true,
 					stopOnInteraction: false,
 				}),
