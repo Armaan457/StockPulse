@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { CircleX } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -27,10 +29,14 @@ const formSchema = z.object({
 });
 
 type LoginFormProps = {
-	handleSwitchToRegister: () => void;
+	readonly handleSwitchToRegister: () => void;
+	readonly closeModal: () => void;
 };
 
-export default function LoginForm({ handleSwitchToRegister }: LoginFormProps) {
+export default function LoginForm({
+	handleSwitchToRegister,
+	closeModal,
+}: LoginFormProps) {
 	// 2. Define the form with default values and resolver.
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -46,6 +52,8 @@ export default function LoginForm({ handleSwitchToRegister }: LoginFormProps) {
 			withCredentials: true,
 		});
 
+		localStorage.setItem("user", JSON.stringify(values));
+
 		// You can handle form submission logic here (e.g., API call).
 	}
 
@@ -53,8 +61,12 @@ export default function LoginForm({ handleSwitchToRegister }: LoginFormProps) {
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
-				className="w-full mx-auto my-3 max-w-md p-8 rounded-lg shadow-lg bg-white space-y-6"
+				className="w-full mx-auto my-3 max-w-md p-8 rounded-lg shadow-lg bg-white space-y-6 relative"
 			>
+				<CircleX
+					className=" absolute right-5 top-5 cursor-pointer"
+					onClick={closeModal}
+				/>
 				<h2 className="text-[2.5rem] font-sans font-semibold text-center text-gray-700">
 					Login
 				</h2>
@@ -98,12 +110,12 @@ export default function LoginForm({ handleSwitchToRegister }: LoginFormProps) {
 
 				<div className="text-right text-sm">
 					Don&apos;t have an Account!{" "}
-					<span
+					<button
 						className="text-red-600 font-semibold cursor-pointer hover:underline"
 						onClick={handleSwitchToRegister}
 					>
 						Register
-					</span>
+					</button>
 				</div>
 				{/* Submit Button */}
 				<Button
