@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { CircleX } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -34,11 +36,13 @@ const formSchema = z.object({
 });
 
 type RegisterPageProps = {
-	handleSwitchToLogin: () => void;
+	readonly handleSwitchToLogin: () => void;
+	readonly closeModal: () => void;
 };
 
 export default function RegisterPage({
 	handleSwitchToLogin,
+	closeModal,
 }: RegisterPageProps) {
 	// 2. Define the form with default values and resolver.
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -61,8 +65,12 @@ export default function RegisterPage({
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
-				className="w-full mx-auto my-3 max-w-md p-8 rounded-lg shadow-lg bg-white space-y-6"
+				className="w-full mx-auto my-3 max-w-md p-8 rounded-lg shadow-lg bg-white space-y-6 relative"
 			>
+				<CircleX
+					className=" absolute right-5 top-5 cursor-pointer"
+					onClick={closeModal}
+				/>
 				<h2 className="text-[2.5rem] font-sans font-semibold text-center text-gray-700">
 					Register
 				</h2>
@@ -162,12 +170,12 @@ export default function RegisterPage({
 
 				<div className="text-right text-sm">
 					Already have an Account!{" "}
-					<span
+					<button
 						className="text-red-600 font-semibold cursor-pointer hover:underline"
 						onClick={handleSwitchToLogin}
 					>
 						Login
-					</span>
+					</button>
 				</div>
 				{/* Submit Button */}
 				<Button

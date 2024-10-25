@@ -12,6 +12,7 @@ const MainLandingPage = () => {
 	const handleSwitchToLogin = () => setLogin(true);
 	const handleSwitchToRegister = () => setLogin(false);
 	const handleLogin = () => setOpaque((prev) => !prev);
+	const closeModal = () => setOpaque(false);
 
 	return (
 		<>
@@ -55,14 +56,20 @@ const MainLandingPage = () => {
 			</div>
 			<div
 				className={`fixed inset-0 flex items-center justify-center ${
-					opaque ? "" : "hidden opacity-0"
+					!opaque ? "hidden opacity-0" : ""
 				}`}
 			>
 				<div className="bg-white p-4 rounded-md shadow-lg min-w-[500px]">
 					{!login ? (
-						<RegisterPage handleSwitchToLogin={handleSwitchToLogin} />
+						<RegisterPage
+							handleSwitchToLogin={handleSwitchToLogin}
+							closeModal={closeModal}
+						/>
 					) : (
-						<LoginForm handleSwitchToRegister={handleSwitchToRegister} />
+						<LoginForm
+							handleSwitchToRegister={handleSwitchToRegister}
+							closeModal={closeModal}
+						/>
 					)}
 				</div>
 			</div>
