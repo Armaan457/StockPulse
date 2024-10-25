@@ -9,6 +9,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import News from "./Pages/News";
 import Layout from "./LandingLayout.tsx";
 import Error from "./Pages/Error.tsx";
+import YoutubeCarousal from "./Pages/YoutubeCarousal.tsx";
 // import Page from "./app/dashboard/page.tsx";
 
 const router = createBrowserRouter([
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
 			{
 				path: "component",
 				element: <Component />,
+			},
+			{
+				path: "yt-c",
+				element: <YoutubeCarousal />,
 			},
 		],
 	},
