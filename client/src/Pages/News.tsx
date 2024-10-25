@@ -22,6 +22,7 @@ const News = () => {
 
 	const onSubmit = (data: NewsData) => {
 		console.log(data);
+		if (data.companyName.trim() === "" || data.moneyInvested === 0) return;
 		setCompanyPortfolioCards((prev) => [
 			...prev,
 			{
@@ -98,7 +99,7 @@ const News = () => {
 					Invest
 				</Button>
 				{companyPortfolioCards.map((card, index) => (
-					<div
+					<button
 						key={index * card.companyName.length}
 						className="w-5/12 mx-auto"
 					>
@@ -107,7 +108,7 @@ const News = () => {
 							stockSentiment={card.stockSentiment}
 							moneyInvested={card.moneyInvested}
 						/>
-					</div>
+					</button>
 				))}
 			</form>
 		</>
