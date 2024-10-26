@@ -46,18 +46,21 @@ const getEmberUrl = (uri: string): string => {
 // 		url={getEmberUrl("https://www.youtube.com/watch?v=enxM1qAdtjs")}
 // 	/>,
 // ];
+
 const YoutubeCarousal = () => {
 	const [arr, setArr] = useState<JSX.Element[]>();
 	useEffect(() => {
 		axios
 			.get("")
 			.then((data) => {
-				data.map((val, index) => (
-					<YtLink
-						url={getEmberUrl(val)}
-						key={val + index}
-					/>
-				));
+				setArr(
+					data.map((val, index) => (
+						<YtLink
+							url={getEmberUrl(val)}
+							key={val + index}
+						/>
+					)),
+				);
 			})
 			.catch((err) => console.log(err));
 	});

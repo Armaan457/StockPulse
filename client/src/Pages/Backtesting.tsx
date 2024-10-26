@@ -3,19 +3,26 @@ import { useForm } from "react-hook-form";
 import SingleLineChart from "@/Part/SingleLineChart";
 
 const Backtesting: React.FC = () => {
-	const { register, handleSubmit } = useForm();
+	const { register, handleSubmit } = useForm<{
+		numCompanies: string;
+		companies: { name: string; value: number }[];
+	}>();
 
 	const [numCompanies, setNumCompanies] = useState(0);
 	const [showGraph, setShowGraph] = useState(false);
-	const [chartData, setChartData] = useState([]);
+	const [chartData, setChartData] = useState<
+		{ name: string; value: number }[]
+	>([]);
 
-	const onSubmit = (data: any) => {
+	const onSubmit = (data: {
+		companies: { name: string; value: number }[];
+	}) => {
 		console.log(data);
 		setShowGraph(true);
 		setChartData(data.companies);
 	};
 
-	const onSubmitNumberOfCompanies = (data: any) => {
+	const onSubmitNumberOfCompanies = (data: { numCompanies: string }) => {
 		console.log(data);
 		setNumCompanies(parseInt(data.numCompanies, 10));
 	};

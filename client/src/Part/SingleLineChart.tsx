@@ -1,13 +1,13 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
+// import { TrendingUp } from "lucide-react";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 import {
 	Card,
 	CardContent,
-	CardDescription,
-	CardFooter,
+	// CardDescription,
+	// CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
@@ -36,7 +36,16 @@ const chartConfig = {
 	},
 } satisfies ChartConfig;
 
-export default function SingleLineChart({ chartData }) {
+type ChartData = {
+	name: string;
+	value: number;
+}[];
+
+export default function SingleLineChart({
+	chartData,
+}: {
+	chartData: ChartData;
+}) {
 	return (
 		<Card className="min-w-[650px]">
 			<CardHeader>
