@@ -51,38 +51,38 @@ const News = () => {
 				<h1 className="text-3xl font-semibold text-red-700">Losers</h1>
 				<div className="grid grid-cols-2 grid-rows-2 ">
 					<NewsCard
-						companyName="Apple"
-						stockTrend={23}
+						companyName="Monopar Therapeutics Inc. (MNPR)"
+						stockTrend={605.4}
 					/>
 					<NewsCard
-						companyName="Starbucks"
-						stockTrend={12}
+						companyName="Nxu Inc. (NXU)"
+						stockTrend={139.15}
 					/>
 					<NewsCard
-						companyName="Meta"
-						stockTrend={76}
+						companyName="Nexalin Technology Inc. Warrant (NXLIW)"
+						stockTrend={114.29}
 					/>
 					<NewsCard
-						companyName="Google"
-						stockTrend={56}
+						companyName="1847 Holdings LLC (EFSH)"
+						stockTrend={109.26}
 					/>
 				</div>
 				<div className="grid grid-cols-2 grid-rows-2">
 					<NewsCard
-						companyName="Berkshir Hathaway"
-						stockTrend={-23}
+						companyName="Marinus Pharmaceuticals Inc. (MRNS)"
+						stockTrend={-82.49}
 					/>
 					<NewsCard
-						companyName="Lemon Brothers"
-						stockTrend={-100}
+						companyName="Lilium N.V. Warrants (LILMW)"
+						stockTrend={-78.8}
 					/>
 					<NewsCard
-						companyName="Nokia"
-						stockTrend={-12}
+						companyName="Orangekloud Technology Inc. (ORKT)"
+						stockTrend={-75.69}
 					/>
 					<NewsCard
-						companyName="Jaguar"
-						stockTrend={-34}
+						companyName="Vision Sensing Acquisition Corp. Warrants (VSACW)"
+						stockTrend={-72.73}
 					/>
 				</div>
 			</div>
