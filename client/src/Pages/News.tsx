@@ -7,11 +7,14 @@ import { useForm } from "react-hook-form";
 import CompanyPortfolioCard, {
 	CompanyPortfolioCardProps,
 } from "@/Part/CompanyPortfolioCard.tsx";
+import axios from "axios";
 
 interface NewsData {
-	companyName: string;
-	moneyInvested: number;
+	ticker_name: string;
+	investment_amount: number;
 }
+
+const BASE_URL = "http://localhost:8000";
 
 const News = () => {
 	const { open } = useSidebar();
@@ -20,15 +23,17 @@ const News = () => {
 		CompanyPortfolioCardProps[]
 	>([]);
 
-	const onSubmit = (data: NewsData) => {
+	const createPortfolioCompany = async (data: NewsData) => {
+		if (data.ticker_name.trim() === "" || data.investment_amount <= 0) return;
 		console.log(data);
-		if (data.companyName.trim() === "" || data.moneyInvested === 0) return;
+		await axios.post(`${BASE_URL}/NewsSection/portfolio`, data);
+		const response = await axios.get(`${BASE_URL}/Chatsession`);
 		setCompanyPortfolioCards((prev) => [
 			...prev,
 			{
-				companyName: data.companyName,
-				stockSentiment: Math.random() >= 0.5,
-				moneyInvested: data.moneyInvested,
+				companyName: data.ticker_name,
+				stockSentiment: response.data.answer,
+				moneyInvested: data.investment_amount,
 			},
 		]);
 	};
@@ -80,20 +85,20 @@ const News = () => {
 				</div>
 			</div>
 			<form
-				onSubmit={handleSubmit(onSubmit)}
+				onSubmit={handleSubmit(createPortfolioCompany)}
 				className="flex min-w-96 flex-col justify-center mt-5 gap-y-4"
 			>
 				<Input
 					type="text"
 					placeholder="Search for a company"
 					className="w-1/3 mx-auto px-5 py-5"
-					{...register("companyName")}
+					{...register("ticker_name")}
 				/>
 				<Input
 					type="number"
 					placeholder="Money Invested"
 					className="w-1/5 mx-auto px-5 py-5"
-					{...register("moneyInvested")}
+					{...register("investment_amount")}
 				/>
 				<Button className="mx-auto w-2/12 py-5 font-semibold">
 					Invest
@@ -101,7 +106,7 @@ const News = () => {
 				{companyPortfolioCards.map((card, index) => (
 					<button
 						key={index * card.companyName.length}
-						className="w-5/12 mx-auto"
+						className="w-full mx-auto"
 					>
 						<CompanyPortfolioCard
 							companyName={card.companyName}

@@ -3,6 +3,7 @@ import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useNavigate } from "react-router-dom";
 
 import { CircleX } from "lucide-react";
 
@@ -47,12 +48,14 @@ export default function LoginForm({
 	});
 
 	// 3. Define the submit handler.
+	const navigate = useNavigate();
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		await axios.post("http://127.0.0.1:8000/api/login/", values, {
 			withCredentials: true,
 		});
 
 		localStorage.setItem("user", JSON.stringify(values));
+		navigate("/pulse");
 
 		// You can handle form submission logic here (e.g., API call).
 	}

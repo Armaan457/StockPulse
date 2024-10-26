@@ -59,6 +59,7 @@ export default function RegisterPage({
 	// 3. Define the submit handler.
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		await axios.post("http://127.0.0.1:8000/api/register/", values);
+		handleSwitchToLogin();
 	}
 
 	return (
