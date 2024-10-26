@@ -7,7 +7,7 @@ import MainLandingPage from "./MainLandingPage.tsx";
 import News from "./Pages/News";
 import Layout from "./LandingLayout.tsx";
 import Error from "./Pages/Error.tsx";
-import YoutubeCarousal from "./Pages/YoutubeCarousal.tsx";
+import YoutubeCarousal from "./Part/YoutubeCarousal.tsx";
 import LineGraph from "./Part/LineGraph/LineGraph.tsx";
 import ChatPage from "./Pages/ChatPage/ChatPage.tsx";
 import Backtesting from "./Pages/Backtesting.tsx";
@@ -22,10 +22,6 @@ const router = createBrowserRouter([
 	{
 		path: "/line-graph",
 		element: <LineGraph />,
-	},
-	{
-		path: "/backtesting",
-		element: <Backtesting />,
 	},
 	{
 		path: "/pulse",
@@ -51,6 +47,10 @@ const router = createBrowserRouter([
 			{
 				path: "chatPage",
 				element: <ChatPage />,
+			},
+			{
+				path: "backtesting",
+				element: <Backtesting />,
 			},
 		],
 	},

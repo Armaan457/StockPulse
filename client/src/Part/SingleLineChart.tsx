@@ -1,13 +1,13 @@
 "use client";
 
-// import { TrendingUp } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 import {
 	Card,
 	CardContent,
-	// CardDescription,
-	// CardFooter,
+	CardDescription,
+	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
@@ -18,7 +18,7 @@ import {
 	ChartTooltipContent,
 } from "@/components/ui/chart";
 
-// export const description = "A line chart";
+export const description = "A line chart";
 
 // const chartData = [
 // 	{ name: "January", value: 186 },
@@ -38,9 +38,9 @@ const chartConfig = {
 
 export default function SingleLineChart({ chartData }) {
 	return (
-		<Card className="min-w-[600px]">
+		<Card className="min-w-[650px]">
 			<CardHeader>
-				<CardTitle>BackTesting</CardTitle>
+				<CardTitle>Backtesting</CardTitle>
 				{/* <CardDescription>January - June 2024</CardDescription> */}
 			</CardHeader>
 			<CardContent>
@@ -55,7 +55,7 @@ export default function SingleLineChart({ chartData }) {
 					>
 						<CartesianGrid vertical={false} />
 						<XAxis
-							dataKey="month"
+							dataKey="name"
 							tickLine={true}
 							axisLine={true}
 							tickMargin={9}
@@ -75,7 +75,7 @@ export default function SingleLineChart({ chartData }) {
 						<Line
 							dataKey="value"
 							type="natural"
-							stroke="var(--color-desktop)"
+							stroke="#000"
 							strokeWidth={3}
 							dot={false}
 						/>
