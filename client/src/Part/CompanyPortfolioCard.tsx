@@ -14,20 +14,30 @@ export interface CompanyPortfolioCardProps {
 	companyName: string;
 	stockSentiment: string;
 	moneyInvested: number;
+	sentiment: string;
 }
 
 const CompanyPortfolioCard: React.FC<CompanyPortfolioCardProps> = ({
 	companyName,
 	stockSentiment,
 	moneyInvested,
+	sentiment,
 }) => {
+	const color =
+		sentiment === "positive"
+			? "green"
+			: sentiment === "neutral"
+			? "gray"
+			: "red";
 	return (
 		<Card className="bg-gray-100 flex justify-around items-center">
 			<CardHeader>
 				<CardTitle className="text-xl">{companyName}</CardTitle>
 			</CardHeader>
 			<CardContent>
-				<CardDescription className="mt-6">{stockSentiment}</CardDescription>
+				<CardDescription className={`mt-6 font-medium text-${color}-500`}>
+					{stockSentiment}
+				</CardDescription>
 			</CardContent>
 			<CardFooter>
 				<CardDescription className="mt-6">{moneyInvested}</CardDescription>

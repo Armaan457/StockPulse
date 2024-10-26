@@ -28,12 +28,14 @@ const News = () => {
 		console.log(data);
 		await axios.post(`${BASE_URL}/NewsSection/portfolio`, data);
 		const response = await axios.get(`${BASE_URL}/Chatsession`);
+		const sentiment = response.data.answer.split("Sentiment:")[1];
 		setCompanyPortfolioCards((prev) => [
 			...prev,
 			{
 				companyName: data.ticker_name,
 				stockSentiment: response.data.answer,
 				moneyInvested: data.investment_amount,
+				sentiment,
 			},
 		]);
 	};
@@ -112,6 +114,7 @@ const News = () => {
 							companyName={card.companyName}
 							stockSentiment={card.stockSentiment}
 							moneyInvested={card.moneyInvested}
+							sentiment={card.sentiment}
 						/>
 					</button>
 				))}

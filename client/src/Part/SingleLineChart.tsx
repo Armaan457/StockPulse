@@ -20,23 +20,23 @@ import {
 
 // export const description = "A line chart";
 
-const chartData = [
-	{ name: "January", value: 186 },
-	{ name: "February", value: 305 },
-	{ name: "March", value: 237 },
-	{ name: "April", value: 73 },
-	{ name: "May", value: 209 },
-	{ name: "June", value: 214 },
-];
+// const chartData = [
+// 	{ name: "January", value: 186 },
+// 	{ name: "February", value: 305 },
+// 	{ name: "March", value: 237 },
+// 	{ name: "April", value: 73 },
+// 	{ name: "May", value: 209 },
+// 	{ name: "June", value: 214 },
+// ];
 
 const chartConfig = {
 	value: {
-		label: "Desktop",
+		label: "Value",
 		color: "hsl(var(--chart-1))",
 	},
 } satisfies ChartConfig;
 
-export default function SingleLineChart() {
+export default function SingleLineChart({ chartData }) {
 	return (
 		<Card className="min-w-[600px]">
 			<CardHeader>
@@ -73,7 +73,7 @@ export default function SingleLineChart() {
 							content={<ChartTooltipContent hideLabel />}
 						/>
 						<Line
-							dataKey="desktop"
+							dataKey="value"
 							type="natural"
 							stroke="var(--color-desktop)"
 							strokeWidth={3}
