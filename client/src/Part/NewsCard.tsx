@@ -22,7 +22,9 @@ const NewsCard: React.FC<NewsCardProps> = ({ companyName, stockTrend }) => {
 	return (
 		<Card className="grid place-items-center min-w-44 gap-2 m-1">
 			<CardHeader>
-				<CardTitle>{companyName}</CardTitle>
+				<CardTitle className="text-center leading-4">
+					{companyName}
+				</CardTitle>
 			</CardHeader>
 			<CardContent>
 				<CardDescription style={{ color: trendColor }}>

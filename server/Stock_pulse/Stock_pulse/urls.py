@@ -21,7 +21,7 @@ from NewsSection.views import ChatSessionView
 from LearningSection.views import SearchToolAPIView
 
 urlpatterns = [
-    path('api/', include('api.urls')),
+   path('auth/', include('Auth.urls')),
     path('admin/', admin.site.urls),
     path('backtesting/' , PortfolioPerformanceView.as_view()),
     path('Movingaverages/' , MovingAveragesView.as_view()),

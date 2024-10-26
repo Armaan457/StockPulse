@@ -7,11 +7,14 @@ import { useForm } from "react-hook-form";
 import CompanyPortfolioCard, {
 	CompanyPortfolioCardProps,
 } from "@/Part/CompanyPortfolioCard.tsx";
+import axios from "axios";
 
 interface NewsData {
-	companyName: string;
-	moneyInvested: number;
+	ticker_name: string;
+	investment_amount: number;
 }
+
+const BASE_URL = "http://localhost:8000";
 
 const News = () => {
 	const { open } = useSidebar();
@@ -20,15 +23,19 @@ const News = () => {
 		CompanyPortfolioCardProps[]
 	>([]);
 
-	const onSubmit = (data: NewsData) => {
+	const createPortfolioCompany = async (data: NewsData) => {
+		if (data.ticker_name.trim() === "" || data.investment_amount <= 0) return;
 		console.log(data);
-		if (data.companyName.trim() === "" || data.moneyInvested === 0) return;
+		await axios.post(`${BASE_URL}/NewsSection/portfolio`, data);
+		const response = await axios.get(`${BASE_URL}/Chatsession`);
+		const sentiment = response.data.answer.split("Sentiment:")[1];
 		setCompanyPortfolioCards((prev) => [
 			...prev,
 			{
-				companyName: data.companyName,
-				stockSentiment: Math.random() >= 0.5,
-				moneyInvested: data.moneyInvested,
+				companyName: data.ticker_name,
+				stockSentiment: response.data.answer,
+				moneyInvested: data.investment_amount,
+				sentiment,
 			},
 		]);
 	};
@@ -44,56 +51,56 @@ const News = () => {
 				<h1 className="text-3xl font-semibold text-red-700">Losers</h1>
 				<div className="grid grid-cols-2 grid-rows-2 ">
 					<NewsCard
-						companyName="Apple"
-						stockTrend={23}
+						companyName="Monopar Therapeutics Inc. (MNPR)"
+						stockTrend={605.4}
 					/>
 					<NewsCard
-						companyName="Starbucks"
-						stockTrend={12}
+						companyName="Nxu Inc. (NXU)"
+						stockTrend={139.15}
 					/>
 					<NewsCard
-						companyName="Meta"
-						stockTrend={76}
+						companyName="Nexalin Technology Inc. Warrant (NXLIW)"
+						stockTrend={114.29}
 					/>
 					<NewsCard
-						companyName="Google"
-						stockTrend={56}
+						companyName="1847 Holdings LLC (EFSH)"
+						stockTrend={109.26}
 					/>
 				</div>
 				<div className="grid grid-cols-2 grid-rows-2">
 					<NewsCard
-						companyName="Berkshir Hathaway"
-						stockTrend={-23}
+						companyName="Marinus Pharmaceuticals Inc. (MRNS)"
+						stockTrend={-82.49}
 					/>
 					<NewsCard
-						companyName="Lemon Brothers"
-						stockTrend={-100}
+						companyName="Lilium N.V. Warrants (LILMW)"
+						stockTrend={-78.8}
 					/>
 					<NewsCard
-						companyName="Nokia"
-						stockTrend={-12}
+						companyName="Orangekloud Technology Inc. (ORKT)"
+						stockTrend={-75.69}
 					/>
 					<NewsCard
-						companyName="Jaguar"
-						stockTrend={-34}
+						companyName="Vision Sensing Acquisition Corp. Warrants (VSACW)"
+						stockTrend={-72.73}
 					/>
 				</div>
 			</div>
 			<form
-				onSubmit={handleSubmit(onSubmit)}
+				onSubmit={handleSubmit(createPortfolioCompany)}
 				className="flex min-w-96 flex-col justify-center mt-5 gap-y-4"
 			>
 				<Input
 					type="text"
 					placeholder="Search for a company"
 					className="w-1/3 mx-auto px-5 py-5"
-					{...register("companyName")}
+					{...register("ticker_name")}
 				/>
 				<Input
 					type="number"
 					placeholder="Money Invested"
 					className="w-1/5 mx-auto px-5 py-5"
-					{...register("moneyInvested")}
+					{...register("investment_amount")}
 				/>
 				<Button className="mx-auto w-2/12 py-5 font-semibold">
 					Invest
@@ -101,12 +108,13 @@ const News = () => {
 				{companyPortfolioCards.map((card, index) => (
 					<button
 						key={index * card.companyName.length}
-						className="w-5/12 mx-auto"
+						className="w-full mx-auto"
 					>
 						<CompanyPortfolioCard
 							companyName={card.companyName}
 							stockSentiment={card.stockSentiment}
 							moneyInvested={card.moneyInvested}
+							sentiment={card.sentiment}
 						/>
 					</button>
 				))}

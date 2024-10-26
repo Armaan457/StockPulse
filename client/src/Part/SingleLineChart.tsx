@@ -1,13 +1,13 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
+// import { TrendingUp } from "lucide-react";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 import {
 	Card,
 	CardContent,
-	CardDescription,
-	CardFooter,
+	// CardDescription,
+	// CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
@@ -20,28 +20,37 @@ import {
 
 export const description = "A line chart";
 
-const chartData = [
-	{ month: "January", desktop: 186 },
-	{ month: "February", desktop: 305 },
-	{ month: "March", desktop: 237 },
-	{ month: "April", desktop: 73 },
-	{ month: "May", desktop: 209 },
-	{ month: "June", desktop: 214 },
-];
+// const chartData = [
+// 	{ name: "January", value: 186 },
+// 	{ name: "February", value: 305 },
+// 	{ name: "March", value: 237 },
+// 	{ name: "April", value: 73 },
+// 	{ name: "May", value: 209 },
+// 	{ name: "June", value: 214 },
+// ];
 
 const chartConfig = {
-	desktop: {
-		label: "Desktop",
+	value: {
+		label: "Value",
 		color: "hsl(var(--chart-1))",
 	},
 } satisfies ChartConfig;
 
-export function Component() {
+type ChartData = {
+	name: string;
+	value: number;
+}[];
+
+export default function SingleLineChart({
+	chartData,
+}: {
+	chartData: ChartData;
+}) {
 	return (
 		<Card className="min-w-[650px]">
 			<CardHeader>
-				<CardTitle>Line Chart</CardTitle>
-				<CardDescription>January - June 2024</CardDescription>
+				<CardTitle>Backtesting</CardTitle>
+				{/* <CardDescription>January - June 2024</CardDescription> */}
 			</CardHeader>
 			<CardContent>
 				<ChartContainer config={chartConfig}>
@@ -55,7 +64,7 @@ export function Component() {
 					>
 						<CartesianGrid vertical={false} />
 						<XAxis
-							dataKey="month"
+							dataKey="name"
 							tickLine={true}
 							axisLine={true}
 							tickMargin={9}
@@ -73,23 +82,23 @@ export function Component() {
 							content={<ChartTooltipContent hideLabel />}
 						/>
 						<Line
-							dataKey="desktop"
+							dataKey="value"
 							type="natural"
-							stroke="var(--color-desktop)"
+							stroke="#000"
 							strokeWidth={3}
 							dot={false}
 						/>
 					</LineChart>
 				</ChartContainer>
 			</CardContent>
-			<CardFooter className="flex-col items-start gap-2 text-sm">
+			{/* <CardFooter className="flex-col items-start gap-2 text-sm">
 				<div className="flex gap-2 font-medium leading-none">
 					Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
 				</div>
 				<div className="leading-none text-muted-foreground">
 					Showing total visitors for the last 6 months
 				</div>
-			</CardFooter>
+			</CardFooter> */}
 		</Card>
 	);
 }

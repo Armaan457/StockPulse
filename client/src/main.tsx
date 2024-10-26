@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+// import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { Component } from "./App.tsx";
@@ -7,9 +7,10 @@ import MainLandingPage from "./MainLandingPage.tsx";
 import News from "./Pages/News";
 import Layout from "./LandingLayout.tsx";
 import Error from "./Pages/Error.tsx";
-import YoutubeCarousal from "./Pages/YoutubeCarousal.tsx";
+import YoutubeCarousal from "./Part/YoutubeCarousal.tsx";
 import LineGraph from "./Part/LineGraph/LineGraph.tsx";
 import ChatPage from "./Pages/ChatPage/ChatPage.tsx";
+import Backtesting from "./Pages/Backtesting.tsx";
 // import Page from "./app/dashboard/page.tsx";
 
 const router = createBrowserRouter([
@@ -47,12 +48,16 @@ const router = createBrowserRouter([
 				path: "chatPage",
 				element: <ChatPage />,
 			},
+			{
+				path: "backtesting",
+				element: <Backtesting />,
+			},
 		],
 	},
 ]);
 
 createRoot(document.getElementById("root")!).render(
 	// <StrictMode>
-		<RouterProvider router={router} />
+	<RouterProvider router={router} />,
 	// </StrictMode>,
 );
