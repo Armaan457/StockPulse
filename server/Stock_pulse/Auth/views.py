@@ -16,35 +16,78 @@ class Register(APIView):
         
         return Response(serializer.data)
     
-class Loginview(APIView):
-    def post(self , request):
+import datetime
+import jwt
+from django.conf import settings
+
+class LoginView(APIView):
+    def post(self, request):
         username = request.data['username']
         password = request.data['password']
-        
+
         user = User.objects.filter(username=username).first()
-        
+
         if user is None:
-            raise AuthenticationFailed('User Not found')
-        
+            raise AuthenticationFailed('User not found')
+
         if not user.check_password(password):
-            raise AuthenticationFailed('Incorrect Password')
-        
-        payload = {
-            'id':user.id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=600),
-            'iat' : datetime.datetime.utcnow()
+            raise AuthenticationFailed('Incorrect password')
+
+        # Access token with a shorter expiration time (e.g., 15 minutes)
+        access_payload = {
+            'id': user.id,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=15),
+            'iat': datetime.datetime.utcnow()
         }
-        
-        token = jwt.encode(payload , 'secret' , algorithm='HS256')
-        
+        access_token = jwt.encode(access_payload, settings.SECRET_KEY, algorithm='HS256')
+
+        # Refresh token with a longer expiration time (e.g., 7 days)
+        refresh_payload = {
+            'id': user.id,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7),
+            'iat': datetime.datetime.utcnow()
+        }
+        refresh_token = jwt.encode(refresh_payload, settings.SECRET_KEY, algorithm='HS256')
+
+        # Return both tokens in the response
         response = Response()
-        response.set_cookie(key='jwt', value=token,httponly=True)
+        response.set_cookie(key='jwt_access', value=access_token, httponly=True)
+        response.set_cookie(key='jwt_refresh', value=refresh_token, httponly=True)
         response.data = {
-            'jwt': token
+            'access_token': access_token,
+            'refresh_token': refresh_token
         }
-        
+
         return response
-    
+
+class RefreshTokenView(APIView):
+    def post(self, request):
+        refresh_token = request.COOKIES.get('jwt_refresh')
+
+        if not refresh_token:
+            raise AuthenticationFailed('Refresh token is missing')
+
+        try:
+            payload = jwt.decode(refresh_token, settings.SECRET_KEY, algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Refresh token has expired')
+
+        # Issue a new access token
+        access_payload = {
+            'id': payload['id'],
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=15),
+            'iat': datetime.datetime.utcnow()
+        }
+        access_token = jwt.encode(access_payload, settings.SECRET_KEY, algorithm='HS256')
+
+        response = Response()
+        response.set_cookie(key='jwt_access', value=access_token, httponly=True)
+        response.data = {
+            'access_token': access_token
+        }
+
+        return response
+
 
 class UserView(APIView):
     

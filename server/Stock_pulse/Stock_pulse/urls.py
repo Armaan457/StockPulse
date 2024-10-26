@@ -21,7 +21,8 @@ from InvestmentSection.views import PortfolioPerformanceView , MovingAveragesVie
 urlpatterns = [
     path('api/', include('api.urls')),
     path('admin/', admin.site.urls),
-    path('bacltesting/' , PortfolioPerformanceView.as_view()),
+    path('backtesting/' , PortfolioPerformanceView.as_view()),
     path('Movingaverages/' , MovingAveragesView.as_view()),
-    path("top-stocks/" , TopStocksView.as_view())
+    path("top-stocks/" , TopStocksView.as_view()),
+    path('NewsSection/', include('NewsSection.urls')),
 ]
