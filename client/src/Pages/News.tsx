@@ -26,16 +26,26 @@ const News = () => {
 	const createPortfolioCompany = async (data: NewsData) => {
 		if (data.ticker_name.trim() === "" || data.investment_amount <= 0) return;
 		console.log(data);
-		await axios.post(`${BASE_URL}/NewsSection/portfolio`, data);
-		const response = await axios.get(`${BASE_URL}/Chatsession`);
-		const sentiment = response.data.answer.split("Sentiment:")[1];
+		// await axios.post(`${BASE_URL}/NewsSection/portfolio`, data);
+		// const response = await axios.get(`${BASE_URL}/Chatsession`);
+		// const [news, sentiment] = response.data.answer.split("Sentiment:");
+		// setCompanyPortfolioCards((prev) => [
+		// 	...prev,
+		// 	{
+		// 		companyName: data.ticker_name,
+		// 		stockSentiment: news,
+		// 		moneyInvested: data.investment_amount,
+		// 		sentiment,
+		// 	},
+		// ]);
 		setCompanyPortfolioCards((prev) => [
 			...prev,
 			{
 				companyName: data.ticker_name,
-				stockSentiment: response.data.answer,
+				stockSentiment:
+					"Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias deserunt, unde, quis minima, adipisci consequatur ex vel voluptates iure doloremque libero natus. Itaque rerum vitae magnam, dolores nam enim ad? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Amet consequatur aliquid consectetur sequi error iure aspernatur, explicabo, dolorum ducimus ullam, odio totam voluptate sunt illo. Earum quisquam reprehenderit ad doloremque?",
 				moneyInvested: data.investment_amount,
-				sentiment,
+				sentiment: "positive",
 			},
 		]);
 	};
@@ -105,20 +115,20 @@ const News = () => {
 				<Button className="mx-auto w-2/12 py-5 font-semibold">
 					Invest
 				</Button>
-				{companyPortfolioCards.map((card, index) => (
-					<button
-						key={index * card.companyName.length}
-						className="w-full mx-auto"
-					>
-						<CompanyPortfolioCard
-							companyName={card.companyName}
-							stockSentiment={card.stockSentiment}
-							moneyInvested={card.moneyInvested}
-							sentiment={card.sentiment}
-						/>
-					</button>
-				))}
 			</form>
+			{companyPortfolioCards.map((card, index) => (
+				<button
+					key={index * card.companyName.length}
+					className="w-8/12 mx-auto"
+				>
+					<CompanyPortfolioCard
+						companyName={card.companyName}
+						stockSentiment={card.stockSentiment}
+						moneyInvested={card.moneyInvested}
+						sentiment={card.sentiment}
+					/>
+				</button>
+			))}
 		</>
 	);
 };
