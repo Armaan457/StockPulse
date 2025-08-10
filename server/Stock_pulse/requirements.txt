@@ -1,6 +1,0 @@
-Django
-djangorestframework
-PyJWT
-django-cors-headers
-celery reddis
-django-celery-beat

@@ -1,8 +1,1 @@
-Django
-djangorestframework
-PyJWT
-django-cors-headers
-requests
-python-dotenv
-langchain-community
-youtube-search-python
+uv==0.8.5

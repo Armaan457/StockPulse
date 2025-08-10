@@ -1,24 +1,75 @@
 # StockPulse
 
-Stock Pulse is an all-in-one solution for stock market investors.
+An all in one stock market analysis platform that combines AI powered insights with comprehensive tools for informed investment decisions.
 
-𝐏𝐥𝐚𝐭𝐟𝐨𝐫𝐦 𝐅𝐞𝐚𝐭𝐮𝐫𝐞𝐬:- 
+## Features
 
-- 𝐂𝐨𝐦𝐩𝐫𝐞𝐡𝐞𝐧𝐬𝐢𝐯𝐞 𝐒𝐭𝐨𝐜𝐤 𝐀𝐧𝐚𝐥𝐲𝐬𝐢𝐬: Delivers in-depth analysis and predictions for investors’ portfolios and stocks of interest.
-- 𝐃𝐮𝐚𝐥-𝐋𝐚𝐲𝐞𝐫𝐞𝐝 𝐀𝐧𝐚𝐥𝐲𝐬𝐢𝐬: Implements both qualitative sentiment analysis of market trends and news, and quantitative back testing of financial data to offer actionable insights.
-- 𝐏𝐞𝐫𝐬𝐨𝐧𝐚𝐥𝐢𝐳𝐞𝐝 𝐋𝐞𝐚𝐫𝐧𝐢𝐧𝐠 𝐒𝐞𝐜𝐭𝐢𝐨𝐧: Tailored resources to educate investors, enhancing their understanding and strategies in stock investments.
-- 𝐂𝐨𝐦𝐦𝐮𝐧𝐢𝐭𝐲 𝐃𝐢𝐬𝐜𝐮𝐬𝐬𝐢𝐨𝐧 𝐅𝐨𝐫𝐮𝐦: A dedicated space for investors to connect, discuss, and exchange ideas.
+- **Stock Analysis & Predictions:** In-depth portfolio analysis with AI-powered market predictions
+- **Dual-Layer Analysis:** Combines sentiment analysis of market news with quantitative backtesting
+- **Learning Hub:** Personalized educational resources for investment strategies
+- **Community Forum:** Connect and discuss with fellow investors
 
-# Technologies used
-**Frontend**: React <br>
-**Backend**: Django REST <br>
-**Database**: SQLite <br>
-**Generative AI**: OnDemand and LangChain <br>
+## Tech Stack
 
-# Developers
-1. Armaan Jagirdar
-2. Himanish Puri
-3. Lakshay Sawhney
-4. Yajat Pahuja
+- **Frontend**: React 
+- **Backend**: Django REST Framework
+- **Database**: SQLite
+- **AI Agents**: OnDemand
 
-Developed during the brAInwave hackathon conducted by the AIMS-DTU in 2024
+## Setup
+
+### Backend
+1. Navigate to server directory:
+   ```bash
+   cd server
+   ```
+
+2. Activate virtual environment:
+   - **macOS/Linux:**
+     ```bash
+     source env/bin/activate
+     ```
+   - **Windows:**
+     ```bash
+     env\Scripts\activate
+     ```
+
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Run migrations:
+   ```bash
+   python manage.py migrate
+   ```
+
+5. Start  server:
+   ```bash
+   python manage.py runserver
+   ```
+
+### Frontend
+1. Navigate to client directory:
+   ```bash
+   cd client
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start development server:
+   ```bash
+   npm run dev
+   ```
+
+## Contributors
+
+- [Armaan Jagirdar](https://github.com/Armaan457)
+- [Lakshay Sawhney](https://github.com/lakshaysawhney)
+- [Yajat Pahuja](https://github.com/yajatpahuja) 
+- [Himanish Puri](https://github.com/himanishpuri)
+
+Built during the brAInwave hackathon by AIMS-DTU in 2024.
