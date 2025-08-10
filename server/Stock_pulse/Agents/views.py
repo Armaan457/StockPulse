@@ -25,7 +25,7 @@ class ChatbotView(APIView):
         if serializer.is_valid():
             try:
                 session_id = get_or_create_session(serializer.validated_data['external_user_id'])
-                query = serializer.validated_data['query'] + " Answer only if the question is from stocks, commodities, and trading, otherwise don't answer."
+                query = serializer.validated_data['query'] + " Answer only if the question is from stocks, commodities, and trading, otherwise don't answer. Use minmum tool calls to get your answer."
                 answer = send_query(session_id, query, [
                     "plugin-1713962163", "plugin-1729875364", "plugin-1728287833",
                     "plugin-1726253762", "plugin-1716429542", "plugin-1716434059"

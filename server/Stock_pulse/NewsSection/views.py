@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from Stock_pulse.tasks import download_nasdaq_data
+# from Stock_pulse.tasks import download_nasdaq_data
 # Create your views here.
 from rest_framework import generics, permissions
 from rest_framework.response import Response
@@ -29,8 +29,8 @@ from django.http import JsonResponse
 from django.views import View
 from django.conf import settings
 import os
-from dotenv import loadenv
-loadenv()
+from dotenv import load_dotenv
+load_dotenv()
 
 class ChatSessionView(View):
     def get(self, request, *args, **kwargs):

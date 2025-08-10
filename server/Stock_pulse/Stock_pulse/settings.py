@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'Agents',
     'corsheaders',
     'channels',
-    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -194,7 +193,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React frontend link
 ]
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
+# CELERY_BROKER_URL = 'redis://localhost:6379/0'
 
 # OnDemand API Configuration
 ONDEMAND_API_KEY = os.getenv('ONDEMAND_API_KEY')
