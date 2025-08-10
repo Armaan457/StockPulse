@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,6 +48,7 @@ INSTALLED_APPS = [
     'NewsSection',
     'LearningSection',
     'InvestmentSection',
+    'Agents',
     'corsheaders',
     'channels',
     'django_celery_beat',
@@ -189,4 +195,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+# OnDemand API Configuration
+ONDEMAND_API_KEY = os.getenv('ONDEMAND_API_KEY')
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'

@@ -1,19 +1,21 @@
 import os
 import requests
-from dotenv import load_dotenv
+from django.conf import settings
 
-load_dotenv()
-ONDEMAND_API_KEY = os.getenv('ONDEMAND_API_KEY')
-
+# User sessions stored in memory (consider using Django cache or database for production)
 user_sessions = {}
 
+
 def get_headers():
+    """Get headers for OnDemand API requests"""
     return {
-        'apikey': ONDEMAND_API_KEY,
+        'apikey': getattr(settings, 'ONDEMAND_API_KEY', os.getenv('ONDEMAND_API_KEY')),
         'Content-Type': 'application/json'
     }
 
+
 def get_or_create_session(external_user_id: str):
+    """Get existing session or create a new one for the user"""
     if external_user_id in user_sessions:
         print("Using existing session")
         return user_sessions[external_user_id]
@@ -26,13 +28,16 @@ def get_or_create_session(external_user_id: str):
     }
 
     response = requests.post(create_session_url, headers=get_headers(), json=create_session_body)
+    response.raise_for_status()
     response_data = response.json()
     
     session_id = response_data['data']['id']
     user_sessions[external_user_id] = session_id
     return session_id
 
+
 def send_query(session_id: str, query: str, plugin_ids: list):
+    """Send a query to the OnDemand API"""
     submit_query_url = f'https://api.on-demand.io/chat/v1/sessions/{session_id}/query'
     submit_query_body = {
         "endpointId": "predefined-openai-gpt4o",

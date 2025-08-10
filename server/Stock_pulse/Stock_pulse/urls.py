@@ -21,12 +21,13 @@ from NewsSection.views import ChatSessionView
 from LearningSection.views import SearchToolAPIView
 
 urlpatterns = [
-   path('auth/', include('Auth.urls')),
+    path('auth/', include('Auth.urls')),
     path('admin/', admin.site.urls),
     path('backtesting/' , PortfolioPerformanceView.as_view()),
     path('Movingaverages/' , MovingAveragesView.as_view()),
     path("top-stocks/" , TopStocksView.as_view()),
     path('NewsSection/', include('NewsSection.urls')),
     path('Chatsession/' , ChatSessionView.as_view()),
-    path("ytlinks/",SearchToolAPIView.as_view())
+    path("ytlinks/",SearchToolAPIView.as_view()),
+    path('agents/', include('Agents.urls')),
 ]
