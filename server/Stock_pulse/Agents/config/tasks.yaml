@@ -1,0 +1,27 @@
+TechnicalAnalysis:
+  description: >
+    Fetch stock data and technical indicators for {ticker} using it's ticker with get_stock_with_indicators tools.
+    Then analyze the provided DataFrame. Identify trends based on the SMAs and EMAs, and generate a brief report on the RSI and MACD signals. The output should be a summary of bullish or bearish technical signals.
+    Act as **Senior Technical Analyst**. You have been provided with the raw historical stock data and calculated technical indicators (SMA, EMA, RSI, MACD, Bollinger Bands) in a DataFrame format from the previous step.
+    Your task is to perform a detailed technical assessment. Specifically, analyze the crossover patterns and slope of the SMAs and EMAs to determine the current trend strength. For the RSI and MACD, identify key signals (e.g., overbought/oversold, bullish/bearish crossovers, divergence). Your output must be a concise, professional report summarizing the overall technical stance (e.g., "Strongly Bullish," "Weakly Bearish"), listing all identified bullish and bearish signals clearly.
+    For the **Bollinger Bands**, note the current price position relative to the bands (e.g., nearing the upper band, breaking the lower band) and assess the band width for volatility.
+    Ignore NaN or incomplete data points in your analysis.
+  expected_output: >
+    A clear, concise report detailing the technical signals (e.g., "RSI is in overbought territory, MACD shows a bullish crossover, SMAs suggest a strong uptrend").
+  agent: TechnicalAnalysisAgent
+
+SentimentAnalysis:
+  description: >
+    Act as a **Market Sentiment Specialist**. Your task is to gauge the market's current feeling toward the stock **{ticker}**. To do this, you must retrieve and analyze news headlines and summaries for the past few days (not more than 4) related to **{ticker}** using get_company_news_summaries tool. Classify each piece of news as positive, negative, or neutral. Synthesize this analysis into a single, unambiguous sentiment statement (e.g., "Bullish," "Bearish," or "Neutral") and provide a brief justification based on the news content (e.g., product updates, regulatory news, earnings forecasts).
+    Be sure to check the news for relevance before including it in your analysis.
+  expected_output: >
+    A report on the market sentiment (e.g., "Bullish sentiment due to recent positive news about product launches and earnings," "Bearish sentiment based on negative reports and regulatory concerns," or "Neutral sentiment with mixed reports").
+  agent: SentimentAnalysisAgent
+
+Prediction:
+  description: >
+    Act as a  **Lead Market Strategist**. Your final and most critical task is to synthesize the **Technical Analysis Report** and the **Market Sentiment Report** provided as context. Critically evaluate the alignment and strength of the signals from both reports (e.g., a strong bullish technical signal is confirmed by bullish sentiment, or conflicting signals exist). 
+    Based on the combined weight of evidence, you must make a clear, definitive prediction for the stock price movement of **{ticker}** for the following trading day. Your final output must strictly follow the required format: first, the prediction (**RISE**, **FALL**, or **STABLE**), followed by a clear, detailed, and separated explanation summarizing the key findings from the Technical Analysis and the Sentiment Analysis that justify your prediction.
+  expected_output: >
+    A final prediction as either "RISE" or "FALL" or "STABLE" along with the detailed explanation for technical and sentiment analysis.
+  agent: PredictionAgent
