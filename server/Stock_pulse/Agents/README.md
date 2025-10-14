@@ -1,6 +1,6 @@
 ### Endpoints
 
-- `POST /videos`
+- `POST agent/videos`
   - Purpose: Search YouTube for videos related to a stock name.
   - Request body (example input):
     ```json
@@ -22,7 +22,7 @@
     - 400: validation errors (missing/invalid `stocks_name`)
     - 500: server/tool errors with `{ "error": "<message>" }`
 
-- `POST /predict`
+- `POST agents/predict`
   - Purpose: Produce a simple prediction for a single stock ticker/name.
   - Request body (example input):
     ```json
@@ -42,8 +42,8 @@
     - 400: validation errors
     - 500: server errors with `{ "error": "<message>" }`
 
-- `POST /analyze`
-  - Purpose: Analyze a portfolio composed of multiple tickers.
+- `POST agents/analyze`
+  - Purpose: Analyze a portfolio composed of multiple stock tickers/names.
   - Request body (example input):
     ```json
     {
@@ -60,7 +60,7 @@
     - 400: validation errors (e.g., not a list)
     - 500: server errors with `{ "error": "<message>" }`
 
-- `POST /chat`
+- `POST agents/chat`
   - Purpose: Query the RAG-powered chatbot for a conversational answer.
   - Request body (example input):
     ```json

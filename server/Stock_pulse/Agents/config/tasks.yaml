@@ -63,21 +63,21 @@ EvaluateDiversity:
   description: >
     Act as a practical **Diversity Assessor** for the portfolio {portfolio_tickers}. Using available metadata (sector, country, market cap, asset class) compute a portfolio diversity assessment. Deliver:
       - Breakdowns by sector, country, and market-cap bands.
-      - Concrete, actionable rebalancing suggestions (target percentage ranges and simple trades to reduce concentration), with an estimated impact on diversity score.
+      - Concrete, actionable rebalancing suggestions (simple trades to reduce concentration with examples).
     Keep suggestions realistic and framed as lightweight, implementable steps (no more than 3 suggested moves).
   expected_output: >
-    A diversity evaluation containing the numeric diversity score, breakdown tables (sector/country/market-cap), identified concentration risks, and 2-3 practical rebalancing recommendations with estimated effect on diversification.
+    A diversity evaluation containing the breakdown tables (sector/country/market-cap), identified concentration risks, and 2-3 practical rebalancing recommendations.
   agent: DiversityAssessorAgent
 
 GeneratePortfolioReport:
   description: >
     Act as the portfolio-level **Strategist**. Combine the outputs from AnalyzeStocks, GetPortfolioNews, and EvaluateDiversity into a single, actionable portfolio report. The deliverable should include:
       - An Executive Summary (2-4 sentences) stating the portfolio's overall stance and top risks/opportunities.
-      - Portfolio-level metrics (aggregate market cap, overall sentiment summary, diversity score, top 5 holdings by weight).
-      - For each company: a one-line verdict and a 1-2 sentence justification referencing technicals, fundamentals, and news, and an optional suggested allocation change (e.g., "Reduce to 4% weight").
-      - Concrete next steps for the portfolio manager (e.g., rebalancing actions, monitoring triggers, and a short watchlist).
+      - Portfolio-level metrics (aggregate market cap, overall sentiment summary and technical summary).
+      - For each company: a one-line verdict and a 1-2 sentence justification referencing technicals, fundamentals, and news.
+      - Concrete next steps for the portfolio manager (e.g., stocks to buy with examples, buying/selling from current portfolio).
     Keep the report actionable and concise; prioritize clarity over exhaustive detail.
   expected_output: >
-    A final portfolio analysis document (NOT JSON) with an executive summary, portfolio-level metrics, and per-company verdicts with brief justifications and recommended allocation actions. Give explanations wherever neccessary.
+    A final portfolio analysis document (NOT JSON or any other format) with an executive summary, portfolio-level metrics, and per-company verdicts with brief justifications and recommended allocation actions. Give explanations wherever neccessary.
   agent: PortfolioStrategistAgent
   context: [AnalyzeStocks, GetPortfolioNews, EvaluateDiversity]
