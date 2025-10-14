@@ -14,7 +14,7 @@ An all in one stock market analysis platform that combines AI powered insights w
 - **Frontend**: React 
 - **Backend**: Django REST Framework
 - **Database**: SQLite and Pinecone
-- **AI/ML**: CrewAI and Langchain
+- **AI/ML**: CrewAI and LangChain
 
 ## Setup
 
