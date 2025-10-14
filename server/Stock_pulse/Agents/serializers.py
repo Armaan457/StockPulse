@@ -11,3 +11,12 @@ class StockPredictionResponseSerializer(serializers.Serializer):
     prediction = serializers.ChoiceField(choices=['RISE', 'FALL', 'STABLE'])
     explanation_technical = serializers.CharField()
     explanation_sentiment = serializers.CharField()
+
+class ChatQueryRequestSerializer(serializers.Serializer):
+    query = serializers.CharField(required=True, help_text="User's question or message.")
+    session_id = serializers.CharField(required=True, help_text="Unique session identifier.") 
+
+class ChatQueryResponseSerializer(serializers.Serializer):
+    session_id = serializers.CharField()
+    query = serializers.CharField()
+    answer = serializers.CharField()

@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import VideosView, StockPredictionView
+from .views import ChatBotView, VideosView, StockPredictionView
 
 urlpatterns = [
     path('videos', VideosView.as_view(), name='videos'),
     path('predict', StockPredictionView.as_view(), name='predict'),
+    path('chat', ChatBotView.as_view(), name='chat'),  
 ]

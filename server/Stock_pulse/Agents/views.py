@@ -5,7 +5,10 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from langchain_community.tools import YouTubeSearchTool
 from .Crews.prediction_crew import PredictionCrew
+from .utils import get_rag_response
 from .serializers import (
+    ChatQueryRequestSerializer,
+    ChatQueryResponseSerializer,
     StocksQueryRequestSerializer, 
     YouTubeResponseSerializer,
     StockPredictionResponseSerializer,
@@ -64,5 +67,34 @@ class VideosView(APIView):
                 )
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ChatBotView(APIView):
+
+    # Temporary Disable authentication
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def post(self, request):
+        serializer = ChatQueryRequestSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        query = serializer.validated_data["query"]
+        session_id = serializer.validated_data["session_id"]
+
+        try:
+            answer = get_rag_response(query, session_id)
+            response_data = {
+                "session_id": session_id,
+                "query": query,
+                "answer": answer,
+            }
+            response_serializer = ChatQueryResponseSerializer(response_data)
+            return Response(response_serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
