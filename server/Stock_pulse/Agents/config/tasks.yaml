@@ -1,27 +1,83 @@
 TechnicalAnalysis:
   description: >
-    Fetch stock data and technical indicators for {ticker} using it's ticker with get_stock_with_indicators tools.
-    Then analyze the provided DataFrame. Identify trends based on the SMAs and EMAs, and generate a brief report on the RSI and MACD signals. The output should be a summary of bullish or bearish technical signals.
-    Act as **Senior Technical Analyst**. You have been provided with the raw historical stock data and calculated technical indicators (SMA, EMA, RSI, MACD, Bollinger Bands) in a DataFrame format from the previous step.
-    Your task is to perform a detailed technical assessment. Specifically, analyze the crossover patterns and slope of the SMAs and EMAs to determine the current trend strength. For the RSI and MACD, identify key signals (e.g., overbought/oversold, bullish/bearish crossovers, divergence). Your output must be a concise, professional report summarizing the overall technical stance (e.g., "Strongly Bullish," "Weakly Bearish"), listing all identified bullish and bearish signals clearly.
-    For the **Bollinger Bands**, note the current price position relative to the bands (e.g., nearing the upper band, breaking the lower band) and assess the band width for volatility.
-    Ignore NaN or incomplete data points in your analysis.
+    Act as **Senior Technical Analyst** for {ticker} stock.
+    - Get data using `get_stock_with_indicators` tool.
+    - You are provided with raw historical price data and calculated indicators (SMA, EMA, RSI, MACD, Bollinger Bands) as a DataFrame.
+    - Analyze SMA/EMA crossover patterns and the slope of moving averages to determine trend direction and strength.
+    - Assess RSI and MACD for key signals (overbought/oversold levels, bullish/bearish crossovers, divergence).
+    - For Bollinger Bands, report the current price position relative to the bands and evaluate band width for volatility.
+    - Produce a concise, professional report that summarizes the overall technical stance (e.g., "Strongly Bullish", "Weakly Bearish") and lists identified bullish and bearish signals.
+    - Ignore NaN or incomplete data points in your analysis.
   expected_output: >
     A clear, concise report detailing the technical signals (e.g., "RSI is in overbought territory, MACD shows a bullish crossover, SMAs suggest a strong uptrend").
   agent: TechnicalAnalysisAgent
 
 SentimentAnalysis:
   description: >
-    Act as a **Market Sentiment Specialist**. Your task is to gauge the market's current feeling toward the stock **{ticker}**. To do this, you must retrieve and analyze news headlines and summaries for the past few days (not more than 4) related to **{ticker}** using get_company_news_summaries tool. Classify each piece of news as positive, negative, or neutral. Synthesize this analysis into a single, unambiguous sentiment statement (e.g., "Bullish," "Bearish," or "Neutral") and provide a brief justification based on the news content (e.g., product updates, regulatory news, earnings forecasts).
-    Be sure to check the news for relevance before including it in your analysis.
+    Act as a **Market Sentiment Specialist** for {ticker} stock.
+    - Retrieve up to the most recent 3-4 news headlines and summaries using `get_company_news_summaries` tool.
+    - Filter for relevance and exclude unrelated mentions.
+    - Classify each item as Positive / Negative / Neutral and give a short rationale.
+    - Synthesize the classified items into a single, unambiguous sentiment statement ("Bullish", "Bearish", or "Neutral") with a brief justification (product updates, regulatory news, earnings, etc.).
   expected_output: >
     A report on the market sentiment (e.g., "Bullish sentiment due to recent positive news about product launches and earnings," "Bearish sentiment based on negative reports and regulatory concerns," or "Neutral sentiment with mixed reports").
   agent: SentimentAnalysisAgent
 
 Prediction:
   description: >
-    Act as a  **Lead Market Strategist**. Your final and most critical task is to synthesize the **Technical Analysis Report** and the **Market Sentiment Report** provided as context. Critically evaluate the alignment and strength of the signals from both reports (e.g., a strong bullish technical signal is confirmed by bullish sentiment, or conflicting signals exist). 
-    Based on the combined weight of evidence, you must make a clear, definitive prediction for the stock price movement of **{ticker}** for the following trading day. Your final output must strictly follow the required format: first, the prediction (**RISE**, **FALL**, or **STABLE**), followed by a clear, detailed, and separated explanation summarizing the key findings from the Technical Analysis and the Sentiment Analysis that justify your prediction.
+    Act as a **Lead Market Strategist**.
+    - Synthesize the Technical Analysis Report and the Market Sentiment Report provided in context.
+    - Critically evaluate alignment and signal strength between technicals and sentiment (confirmations or conflicts).
+    - Based on the combined evidence, produce a clear, definitive next-day stock movement prediction for **{ticker}**.
+    - Output must strictly follow this format: the prediction (one of **RISE**, **FALL**, or **STABLE**), followed by a clear, detailed, and separated explanation summarizing key findings from both Technical Analysis and Sentiment Analysis that justify the prediction.
   expected_output: >
     A final prediction as either "RISE" or "FALL" or "STABLE" along with the detailed explanation for technical and sentiment analysis.
   agent: PredictionAgent
+  context: [TechnicalAnalysisTask, SentimentAnalysisTask]
+
+AnalyzeStocks:
+  description: >
+    Act as a concise, data-driven **Financial Analyst**. For the portfolio {portfolio_tickers} use the `get_portfolio_with_indicators` tool to fetch up-to-date price, technical indicators (e.g., RSI, MACD, SMA/EMA), and basic fundamentals (e.g., market cap, P/E, EPS) for each company. Produce a clean report with one section per company containing:
+      - Key numeric data points (current price, market cap, P/E, EPS).
+      - Short-term and medium-term technical signals (RSI value and interpretation, MACD direction/crossover, SMA(50)/SMA(200) relationship, Bollinger Bands).
+      - A concise 1-2 sentence interpretation of the company's current financial/technical stance and a single-line risk note (e.g., "High volatility", "Stable earnings").
+    Prefer clear numbers and short interpretations. Ignore missing/NaN values.
+  expected_output: >
+    A structured financial analysis report with a section per company that lists numeric metrics (price, market cap, P/E, RSI, MACD) and a short interpretation (1-2 sentences) plus a one-line risk note. Keep each company's section short and factual.
+  agent: FinancialAnalystAgent
+
+GetPortfolioNews:
+  description: >
+    Act as a focused **Market News Reporter**. For {portfolio_tickers} use `get_portfolio_news_summaries` tool to retrieve up to the most recent 3-4 relevant items per ticker (headlines + brief summary). For each company:
+      - Keep only directly relevant items (filter out unrelated mentions).
+      - Classify each item as Positive / Negative / Neutral and give a one-line rationale.
+      - Assign an impact level (High / Medium / Low) for the stock price or sentiment.
+      - Provide a 1-2 sentence synthesis of overall news sentiment for the company.
+    Deliver a concise, clearly labeled section per company.
+  expected_output: >
+    A news summary report with up to 3-4 recent, relevant items per company (headline + short summary), a sentiment label and impact level per item, and a short synthesized sentiment sentence per company.
+  agent: MarketNewsReporterAgent
+  context: [AnalyzeStocks]
+
+EvaluateDiversity:
+  description: >
+    Act as a practical **Diversity Assessor** for the portfolio {portfolio_tickers}. Using available metadata (sector, country, market cap, asset class) compute a portfolio diversity assessment. Deliver:
+      - Breakdowns by sector, country, and market-cap bands.
+      - Concrete, actionable rebalancing suggestions (target percentage ranges and simple trades to reduce concentration), with an estimated impact on diversity score.
+    Keep suggestions realistic and framed as lightweight, implementable steps (no more than 3 suggested moves).
+  expected_output: >
+    A diversity evaluation containing the numeric diversity score, breakdown tables (sector/country/market-cap), identified concentration risks, and 2-3 practical rebalancing recommendations with estimated effect on diversification.
+  agent: DiversityAssessorAgent
+
+GeneratePortfolioReport:
+  description: >
+    Act as the portfolio-level **Strategist**. Combine the outputs from AnalyzeStocks, GetPortfolioNews, and EvaluateDiversity into a single, actionable portfolio report. The deliverable should include:
+      - An Executive Summary (2-4 sentences) stating the portfolio's overall stance and top risks/opportunities.
+      - Portfolio-level metrics (aggregate market cap, overall sentiment summary, diversity score, top 5 holdings by weight).
+      - For each company: a one-line verdict and a 1-2 sentence justification referencing technicals, fundamentals, and news, and an optional suggested allocation change (e.g., "Reduce to 4% weight").
+      - Concrete next steps for the portfolio manager (e.g., rebalancing actions, monitoring triggers, and a short watchlist).
+    Keep the report actionable and concise; prioritize clarity over exhaustive detail.
+  expected_output: >
+    A final portfolio analysis document (NOT JSON) with an executive summary, portfolio-level metrics, and per-company verdicts with brief justifications and recommended allocation actions. Give explanations wherever neccessary.
+  agent: PortfolioStrategistAgent
+  context: [AnalyzeStocks, GetPortfolioNews, EvaluateDiversity]

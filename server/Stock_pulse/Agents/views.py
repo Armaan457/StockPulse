@@ -4,12 +4,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from langchain_community.tools import YouTubeSearchTool
-from .Crews.prediction_crew import PredictionCrew
+from .Crews.crews import StockCrews
 from .utils import get_rag_response
 from .serializers import (
     ChatQueryRequestSerializer,
     ChatQueryResponseSerializer,
-    StocksQueryRequestSerializer, 
+    PortfolioAnalysisResponseSerializer,
+    StocksQueryRequestSerializer,
+    PortfolioAnalysisRequestSerializer,
     YouTubeResponseSerializer,
     StockPredictionResponseSerializer,
 )
@@ -29,7 +31,7 @@ class StockPredictionView(APIView):
         stocks_name = serializer.validated_data['stocks_name']
 
         try:
-            crew = PredictionCrew().crew()
+            crew = StockCrews().PredictionCrew()
             result = crew.kickoff(inputs={"ticker": stocks_name})
             result = result.json_dict
 
@@ -38,6 +40,37 @@ class StockPredictionView(APIView):
                 return Response(response_serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             return Response(response_serializer.data, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class StockPortfolioAnalysisView(APIView):
+
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def post(self, request):
+        serializer = PortfolioAnalysisRequestSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        portfolio_tickers = serializer.validated_data['portfolio_tickers']
+
+        try:
+            crew = StockCrews().PortfolioCrew()
+            tickers = portfolio_tickers
+
+            result = crew.kickoff(inputs={"portfolio_tickers": tickers})
+
+            response_data = {"summary": result.raw}
+
+            response_serializer = PortfolioAnalysisResponseSerializer(data=response_data)
+            if not response_serializer.is_valid():
+                return Response(response_serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            return Response(response_serializer.data, status=status.HTTP_200_OK)
+
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
