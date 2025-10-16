@@ -28,5 +28,4 @@ class ChatQueryRequestSerializer(serializers.Serializer):
 
 class ChatQueryResponseSerializer(serializers.Serializer):
     session_id = serializers.CharField()
-    query = serializers.CharField()
     answer = serializers.CharField()

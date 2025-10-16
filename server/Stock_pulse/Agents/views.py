@@ -120,7 +120,6 @@ class ChatBotView(APIView):
             answer = get_rag_response(query, session_id)
             response_data = {
                 "session_id": session_id,
-                "query": query,
                 "answer": answer,
             }
             response_serializer = ChatQueryResponseSerializer(response_data)
