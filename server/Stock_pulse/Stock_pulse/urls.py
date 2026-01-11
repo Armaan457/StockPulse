@@ -30,4 +30,5 @@ urlpatterns = [
     path('Chatsession/' , ChatSessionView.as_view()),
     path("ytlinks/",SearchToolAPIView.as_view()),
     path('agents/', include('Agents.urls')),
+    path('api/investment/', include('InvestmentSection.urls')),
 ]
