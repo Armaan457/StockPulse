@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from InvestmentSection.views import PortfolioPerformanceView , MovingAveragesView , TopStocksView 
+from InvestmentSection.views import PortfolioPerformanceView , TopStocksView
 from NewsSection.views import ChatSessionView 
 from LearningSection.views import SearchToolAPIView
 
@@ -24,7 +24,6 @@ urlpatterns = [
     path('auth/', include('Auth.urls')),
     path('admin/', admin.site.urls),
     path('backtesting/' , PortfolioPerformanceView.as_view()),
-    path('Movingaverages/' , MovingAveragesView.as_view()),
     path("top-stocks/" , TopStocksView.as_view()),
     path('NewsSection/', include('NewsSection.urls')),
     path('Chatsession/' , ChatSessionView.as_view()),
