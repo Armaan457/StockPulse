@@ -16,9 +16,9 @@ from .tools import (
 load_dotenv()
 
 llm = LLM(
-    model="gemini/gemini-2.0-flash",
+    model="google/gemini-2.5-flash",
     temperature=0.7,
-    api_key=os.getenv("GEMINI_API_KEY")
+    api_key=os.getenv("GOOGLE_API_KEY")
 )
 
 

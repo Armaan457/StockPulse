@@ -21,9 +21,11 @@ index = pc.Index(index_name)
 vector_store = PineconeVectorStore(index=index, embedding=embeddings)
 retriever = vector_store.as_retriever(search_kwargs={"k": 3})
 llm = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash",
-        api_key=os.getenv("GEMINI_API_KEY"),
-    )
+        model="gemini-2.5-flash",
+        api_key=os.getenv("GOOGLE_API_KEY"),
+        convert_system_message_to_human=True,
+)
+
 _STORE = {}
 SESSION_LIFETIME = 600 
 
@@ -102,4 +104,5 @@ def get_rag_response(query: str, session_id: str):
         {"input": query},
         config={"configurable": {"session_id": session_id}}
     )
+    print(response)
     return response["answer"]
