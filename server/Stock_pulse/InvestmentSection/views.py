@@ -6,8 +6,14 @@ from rest_framework.views import APIView
 import yfinance as yf
 import pandas as pd
 from rest_framework import status
+from .serializers import (
+    PortfolioPerformanceResponseSerializer,
+    TopStocksResponseSerializer,
+)
 
 class PortfolioPerformanceView(APIView):
+    serializer_class = PortfolioPerformanceResponseSerializer
+
     def get(self, request):
         companies = request.query_params.getlist('companies')
         amounts = request.query_params.getlist('amounts')
@@ -53,6 +59,7 @@ class PortfolioPerformanceView(APIView):
 
 class TopStocksView(APIView):
     DEFAULT_TICKERS = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA', 'META', 'TSLA', 'JPM', 'V', 'WMT']
+    serializer_class = TopStocksResponseSerializer
 
     def get(self, request):
         tickers = request.query_params.getlist('tickers') or self.DEFAULT_TICKERS

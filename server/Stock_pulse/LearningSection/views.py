@@ -73,31 +73,3 @@ class ChatSessionView(View):
 
         # Return all responses for each area of interest
         return JsonResponse({'responses': responses})
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-
-class SearchToolAPIView(APIView):
-    def get(self, request):
-        # Check if user is authenticated
-        user = request.user
-        if not user.is_authenticated:
-            return Response({'error': 'User not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
-
-        # Retrieve the company name from request query parameters
-        company_name = request.query_params.get('company_name')
-        if not company_name:
-            return Response({'error': 'Company name not provided'}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Instantiate the YouTube search tool and run the search
-        tool = YouTubeSearchTool()
-        try:
-            # Get the comma-separated results and split them into a list
-            results_string = tool.run(company_name, 5)  # Returns comma-separated links
-            results_list = results_string.split(',')  # Convert to list
-        except Exception as e:
-            return Response({'error': f'Failed to retrieve search results: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        # Return only the list of results
-        return Response(results_list, status=status.HTTP_200_OK)

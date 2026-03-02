@@ -4,10 +4,12 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from Auth.models import CustomUser
-from Auth.serializers import CustomUserSerializer
+from Auth.serializers import CustomUserSerializer, LogoutRequestSerializer
 
 class RegisterUserView(APIView):
     permission_classes = (AllowAny,)
+    serializer_class = CustomUserSerializer
+
     def post(self, request):
         serializer = CustomUserSerializer(data = request.data)
         if serializer.is_valid():
@@ -17,6 +19,8 @@ class RegisterUserView(APIView):
 
 class AllUsersView(APIView):
     permission_classes = (IsAuthenticated,)
+    serializer_class = CustomUserSerializer
+
     def get(self, request):
         users = CustomUser.objects.all()
         serializer = CustomUserSerializer(users, many=True)
@@ -24,6 +28,8 @@ class AllUsersView(APIView):
 
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
+    serializer_class = LogoutRequestSerializer
+
     def post(self, request):
         try:
             refresh_token = request.data['refresh_token']

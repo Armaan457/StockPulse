@@ -1,6 +1,10 @@
 from rest_framework import serializers
 from Auth.models import CustomUser
 
+
+class LogoutRequestSerializer(serializers.Serializer):
+    refresh_token = serializers.CharField()
+
 class CustomUserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 

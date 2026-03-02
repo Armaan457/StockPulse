@@ -20,11 +20,13 @@ embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 index = pc.Index(index_name)
 vector_store = PineconeVectorStore(index=index, embedding=embeddings)
 retriever = vector_store.as_retriever(search_kwargs={"k": 3})
-llm = ChatGoogleGenerativeAI(
-        model="gemini-2.5-flash",
-        api_key=os.getenv("GOOGLE_API_KEY"),
-        convert_system_message_to_human=True,
-)
+
+def get_llm():
+    return ChatGoogleGenerativeAI(
+        model="gemini-1.5-flash",
+        temperature=0.3,
+        google_api_key=os.getenv("GOOGLE_API_KEY")
+    )
 
 _STORE = {}
 SESSION_LIFETIME = 600 
@@ -64,6 +66,8 @@ def get_conversational_rag_chain():
             ("human", "{input}"),
         ]
     )
+
+    llm = get_llm()
 
     history_aware_retriever = create_history_aware_retriever(
         llm, retriever, contextualize_q_prompt

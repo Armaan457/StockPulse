@@ -22,6 +22,7 @@ class StockPredictionView(APIView):
     # Temporary Disable authentication
     permission_classes = [AllowAny]
     authentication_classes = []
+    serializer_class = StocksQueryRequestSerializer
 
     def post(self, request):
         serializer = StocksQueryRequestSerializer(data=request.data)
@@ -49,6 +50,7 @@ class StockPortfolioAnalysisView(APIView):
 
     permission_classes = [AllowAny]
     authentication_classes = []
+    serializer_class = PortfolioAnalysisRequestSerializer
 
     def post(self, request):
         serializer = PortfolioAnalysisRequestSerializer(data=request.data)
@@ -81,6 +83,7 @@ class VideosView(APIView):
     # Temporary Disable authentication
     permission_classes = [AllowAny]
     authentication_classes = []
+    serializer_class = StocksQueryRequestSerializer
 
     def post(self, request):
         serializer = StocksQueryRequestSerializer(data=request.data)
@@ -107,6 +110,7 @@ class ChatBotView(APIView):
     # Temporary Disable authentication
     permission_classes = [AllowAny]
     authentication_classes = []
+    serializer_class = ChatQueryRequestSerializer
 
     def post(self, request):
         serializer = ChatQueryRequestSerializer(data=request.data)

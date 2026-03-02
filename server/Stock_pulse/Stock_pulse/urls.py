@@ -18,7 +18,10 @@ from django.contrib import admin
 from django.urls import path,include
 from InvestmentSection.views import PortfolioPerformanceView , TopStocksView
 from NewsSection.views import ChatSessionView 
-from LearningSection.views import SearchToolAPIView
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularSwaggerView,
+)
 
 urlpatterns = [
     path('auth/', include('Auth.urls')),
@@ -27,7 +30,8 @@ urlpatterns = [
     path("top-stocks/" , TopStocksView.as_view()),
     path('NewsSection/', include('NewsSection.urls')),
     path('Chatsession/' , ChatSessionView.as_view()),
-    path("ytlinks/",SearchToolAPIView.as_view()),
     path('agents/', include('Agents.urls')),
     path('api/investment/', include('InvestmentSection.urls')),
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
 ]
