@@ -1,1 +1,0 @@
-# Stock_Pulse-Backend
