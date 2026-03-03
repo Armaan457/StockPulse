@@ -2,7 +2,7 @@ import ast
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 from langchain_community.tools import YouTubeSearchTool
 from .Crews.crews import StockCrews
 from .utils import get_rag_response
@@ -18,10 +18,7 @@ from .serializers import (
 
 
 class StockPredictionView(APIView):
-
-    # Temporary Disable authentication
-    permission_classes = [AllowAny]
-    authentication_classes = []
+    permission_classes = [IsAuthenticated]
     serializer_class = StocksQueryRequestSerializer
 
     def post(self, request):
@@ -47,9 +44,7 @@ class StockPredictionView(APIView):
 
 
 class StockPortfolioAnalysisView(APIView):
-
-    permission_classes = [AllowAny]
-    authentication_classes = []
+    permission_classes = [IsAuthenticated]
     serializer_class = PortfolioAnalysisRequestSerializer
 
     def post(self, request):
@@ -79,10 +74,7 @@ class StockPortfolioAnalysisView(APIView):
 
 
 class VideosView(APIView):    
-
-    # Temporary Disable authentication
-    permission_classes = [AllowAny]
-    authentication_classes = []
+    permission_classes = [IsAuthenticated]
     serializer_class = StocksQueryRequestSerializer
 
     def post(self, request):
@@ -106,10 +98,7 @@ class VideosView(APIView):
 
 
 class ChatBotView(APIView):
-
-    # Temporary Disable authentication
-    permission_classes = [AllowAny]
-    authentication_classes = []
+    permission_classes = [IsAuthenticated]
     serializer_class = ChatQueryRequestSerializer
 
     def post(self, request):
