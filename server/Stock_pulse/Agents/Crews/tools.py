@@ -11,12 +11,12 @@ load_dotenv()
 finnhub_client = finnhub.Client(api_key=os.getenv("FINNHUB_API_KEY"))
 
 @tool
-def get_stock_with_indicators(ticker: str, period: str = "3m", interval: str = "1d") -> str:
+def get_stock_with_indicators(ticker: str, period: str = "1mo", interval: str = "1d") -> str:
     """Fetch historical stock data for a ticker and return a string table with technical indicators.
 
     Args:
         ticker: Stock ticker symbol (e.g. 'AAPL').
-        period: Data period to download (passed to yfinance, default '3m').
+        period: Data period to download (passed to yfinance, default '1mo').
         interval: Data interval (passed to yfinance, default '1d').
 
     Returns:
@@ -68,19 +68,52 @@ def get_company_news_summaries(ticker: str, days: int = 2) -> List[str]:
     from_date = (datetime.today() - timedelta(days=days)).strftime('%Y-%m-%d')
     try:
         news_data = finnhub_client.company_news(ticker, _from=from_date, to=to_date)
-        summaries = [f"Headline: {article['headline']}\nSummary: {article['summary']}" for article in news_data]
+        seen_headlines = set()
+        filtered_news = []
+        keywords = [ticker]
+
+        for article in news_data:
+            headline = article.get("headline", "")
+            summary = article.get("summary", "")
+            related = article.get("related", "")
+
+            is_related = ticker in related
+            is_keyword_match = any(
+                k.lower() in (headline + summary).lower()
+                for k in keywords
+            )
+
+            if headline in seen_headlines:
+                continue
+
+            if is_related or is_keyword_match:
+                seen_headlines.add(headline)
+                filtered_news.append(article)
+
+        filtered_news.sort(key=lambda x: x.get("datetime", 0), reverse=True)
+
+        filtered_news = filtered_news[:10]
+
+        summaries = [
+            f"Headline: {article.get('headline', 'N/A')}\nSummary: {article.get('summary', 'N/A')}"
+            for article in filtered_news
+        ]
+
+        if not summaries:
+            return [f"No relevant news found for {ticker}."]
+
         return summaries
     except Exception as e:
         return [f"An error occurred while fetching news: {e}"]
 
 
 @tool
-def get_portfolio_with_indicators(portfolio: List[str], period: str = "3m", interval: str = "1d") -> dict:
+def get_portfolio_with_indicators(portfolio: List[str], period: str = "1mo", interval: str = "1d") -> dict:
     """Fetch historical stock data and indicators for a list of tickers.
 
     Args:
         portfolio: List of stock ticker symbols (e.g. ['AAPL','MSFT']).
-        period: Data period to download (passed to yfinance, default '3m').
+        period: Data period to download (passed to yfinance, default '1mo').
         interval: Data interval (passed to yfinance, default '1d').
 
     Returns:
@@ -137,7 +170,40 @@ def get_portfolio_news_summaries(portfolio: List[str], days: int = 2) -> dict:
     for ticker in portfolio:
         try:
             news_data = finnhub_client.company_news(ticker, _from=from_date, to=to_date)
-            summaries = [f"Headline: {article.get('headline')}\nSummary: {article.get('summary')}" for article in news_data]
+            seen_headlines = set()
+            filtered_news = []
+            keywords = [ticker]
+
+            for article in news_data:
+                headline = article.get("headline", "")
+                summary = article.get("summary", "")
+                related = article.get("related", "")
+
+                is_related = ticker in related
+                is_keyword_match = any(
+                    k.lower() in (headline + summary).lower()
+                    for k in keywords
+                )
+
+                if headline in seen_headlines:
+                    continue
+
+                if is_related or is_keyword_match:
+                    seen_headlines.add(headline)
+                    filtered_news.append(article)
+
+            filtered_news.sort(key=lambda x: x.get("datetime", 0), reverse=True)
+
+            filtered_news = filtered_news[:10]
+
+            summaries = [
+                f"Headline: {article.get('headline', 'N/A')}\nSummary: {article.get('summary', 'N/A')}"
+                for article in filtered_news
+            ]
+
+            if not summaries:
+                return [f"No relevant news found for {ticker}."]
+
             results[ticker] = summaries
         except Exception as e:
             results[ticker] = [f"An error occurred while fetching news for {ticker}: {e}"]

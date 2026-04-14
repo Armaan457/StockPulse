@@ -9,6 +9,8 @@ class PortfolioAnalysisRequestSerializer(serializers.Serializer):
     portfolio_tickers = serializers.ListField(
         child=serializers.CharField(), required=True
     )
+    portfolio_stocks = serializers.JSONField(required=True)
+    trader_profile = serializers.CharField(required=True)
 
 class YouTubeResponseSerializer(serializers.Serializer):
     videos = serializers.ListField(child=serializers.CharField())
@@ -22,10 +24,27 @@ class StockPredictionResponseSerializer(serializers.Serializer):
 class PortfolioAnalysisResponseSerializer(serializers.Serializer):
     summary = serializers.CharField()
 
+
+class ChatHistoryMessageSerializer(serializers.Serializer):
+    role = serializers.ChoiceField(
+        choices=["user", "assistant", "system", "bot"],
+        help_text="Role of the message sender.",
+    )
+    content = serializers.CharField(
+        allow_blank=False,
+        trim_whitespace=True,
+        help_text="Message text content.",
+    )
+
 class ChatQueryRequestSerializer(serializers.Serializer):
     query = serializers.CharField(required=True, help_text="User's question or message.")
-    session_id = serializers.CharField(required=True, help_text="Unique session identifier.") 
+    history = ChatHistoryMessageSerializer(
+        many=True,
+        required=False,
+        allow_null=True,
+        default=list,
+        help_text="Optional conversation history as an array of role/content messages.",
+    )
 
 class ChatQueryResponseSerializer(serializers.Serializer):
-    session_id = serializers.CharField()
     answer = serializers.CharField()

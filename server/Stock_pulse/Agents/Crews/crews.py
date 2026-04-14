@@ -31,19 +31,19 @@ class StockCrews():
 
     @agent
     def FinancialAnalystAgent(self) -> Agent:
-        return Agent(config=self.agents_config['FinancialAnalystAgent'], llm=llm, verbose=True)
+        return Agent(config=self.agents_config['FinancialAnalystAgent'], llm=llm, verbose=False)
 
     @agent
     def MarketNewsReporterAgent(self) -> Agent:
-        return Agent(config=self.agents_config['MarketNewsReporterAgent'], llm=llm, verbose=True)
+        return Agent(config=self.agents_config['MarketNewsReporterAgent'], llm=llm, verbose=False)
 
     @agent
     def DiversityAssessorAgent(self) -> Agent:
-        return Agent(config=self.agents_config['DiversityAssessorAgent'], llm=llm, verbose=True)
+        return Agent(config=self.agents_config['DiversityAssessorAgent'], llm=llm, verbose=False)
 
     @agent
     def PortfolioStrategistAgent(self) -> Agent:
-        return Agent(config=self.agents_config['PortfolioStrategistAgent'], llm=llm, verbose=True)
+        return Agent(config=self.agents_config['PortfolioStrategistAgent'], llm=llm, verbose=False)
 
     @task
     def AnalyzeStocks(self) -> Task:
@@ -82,11 +82,11 @@ class StockCrews():
 
     @agent
     def TechnicalAnalysisAgent(self) -> Agent:
-        return Agent(config=self.agents_config['TechnicalAnalysisAgent'], llm=llm, verbose=True)
+        return Agent(config=self.agents_config['TechnicalAnalysisAgent'], llm=llm, verbose=False)
 
     @agent
     def SentimentAnalysisAgent(self) -> Agent:
-        return Agent(config=self.agents_config['SentimentAnalysisAgent'], llm=llm, verbose=True)
+        return Agent(config=self.agents_config['SentimentAnalysisAgent'], llm=llm, verbose=False)
 
     @agent
     def PredictionAgent(self) -> Agent:
@@ -120,7 +120,6 @@ class StockCrews():
         )
 
 
-# Example usage (commented out):
 # stock_crews = StockCrews()
 # portfolio_res = stock_crews.PortfolioCrew().kickoff(inputs={"portfolio_tickers": ["AAPL", "GOOGL", "MSFT"]})
 # prediction_res = stock_crews.PredictionCrew().kickoff(inputs={"ticker": "BRK.B"})

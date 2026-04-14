@@ -1,112 +1,107 @@
+from crewai import Task, Crew, Agent, LLM
 import os
-import time
 from dotenv import load_dotenv
-from langchain.chains import create_history_aware_retriever, create_retrieval_chain
-from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain_community.chat_message_histories import ChatMessageHistory
-from langchain_core.chat_history import BaseChatMessageHistory
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.runnables.history import RunnableWithMessageHistory
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_pinecone import PineconeVectorStore
-from pinecone import Pinecone
-from langchain_huggingface import HuggingFaceEmbeddings
+
+from .Crews.tools import (
+    get_company_news_summaries,
+    get_stock_with_indicators,
+)
 
 load_dotenv()
 
-index_name = "stockpulse-db"
-pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
-embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-index = pc.Index(index_name)
-vector_store = PineconeVectorStore(index=index, embedding=embeddings)
-retriever = vector_store.as_retriever(search_kwargs={"k": 3})
+llm = LLM(
+    model="groq/llama-3.3-70b-versatile",
+    api_key=os.getenv("GROQ_API_KEY"),
+)
 
-def get_llm():
-    return ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",
-        temperature=0.3,
-        google_api_key=os.getenv("GOOGLE_API_KEY")
+chatbot_agent = Agent(
+    role="Financial and Stock Assistant Chatbot",
+    goal="""
+    Answer user queries about stocks and finance accurately.
+    Use tools for live prices, recent news, and other time-sensitive data.
+    Use your own knowledge for static finance facts, common ticker/company mappings, and general finance explanations.
+    You MUST decline any question that is clearly not finance or stock related.
+    """,
+   backstory="""
+    You are a financial and stock assistant.
+
+    Rules:
+    - Treat questions about tickers, stock symbols, listed companies, prices, charts, earnings, market data, financial metrics, investing, and general finance as finance-related
+    - Infer the finance or stock relation from the wording when the intent is clear
+    - If the user asks for a ticker symbol, company name, exchange listing, or a similar static finance fact, answer directly from your knowledge without refusing
+    - If a question is clearly outside finance and stocks, politely refuse in one short sentence
+    - Use get_stock_with_indicators with period="5d", interval="1d" for live or recent prices/data
+    - Use get_company_news_summaries for recent news
+    - Never return raw tool output (JSON, dicts, arrays, keys, or debug text) to the user
+    - Convert tool results into a clean natural-language answer before responding
+    - Never fabricate live or recent data; if you do not need a tool, answer from your own knowledge
+    - Answer only what the user explicitly asked, and nothing else
+    - Keep answers concise (1 para maximum)
+    """,
+    llm=llm,
+    tools=[get_company_news_summaries, get_stock_with_indicators],
+    verbose=False,
+    allow_delegation=False,
+    max_iter=5
+)
+
+chat_task = Task(
+    description="""
+    Conversation History:
+    {history}
+
+    User Query: {query}
+
+    Instructions:
+    - Analyze the query carefully
+    - Use conversation history for context if needed
+    - First classify whether the query is finance or stock related
+    - If the intent is clearly finance or stock related, continue
+    - Only refuse briefly if the query is clearly unrelated to finance or stocks
+    - Decide whether the question needs live or recent data before using tools
+    - If the answer is a static finance fact, answer directly without tools
+    - If live or recent data is required, call the appropriate tool
+    - After calling any tool, synthesize the result into a plain-language final answer
+    - Never copy tool payloads, field names, JSON, or structured blobs into final output
+    - DO NOT fabricate stock data
+    - Provide a clear and concise final answer
+    """,
+    agent=chatbot_agent,
+    expected_output="""
+    A direct answer containing only the exact information asked for.
+
+    Strict Requirements:
+    - If the query is outside stocks and finance, output only: "I can only help with finance-related questions."
+    - Do not refuse finance questions just because no tool supports the lookup
+    - Do not add context, explanations, summaries, or related facts unless the user asked for them
+    - Do not mention unrelated market news, competitor updates, or industry trends
+    - If tools are used, include only the specific fact requested from the tool output
+    - Final output must be human-readable text only, never raw tool output
+    - Never output JSON, Python dict/list formatting, markdown code blocks, or tool trace text
+    - No external suggestions or follow-up text
+    """
+)
+
+chat_crew = Crew(
+    agents=[chatbot_agent],
+    tasks=[chat_task],
+    llm=llm,
+    verbose=False,
+)
+
+
+def format_history(history: list) -> str:
+    last_5 = history[-5:] if len(history) > 5 else history
+    return "\n".join(
+        [f"{msg['role']}: {msg['content']}" for msg in last_5]
     )
 
-_STORE = {}
-SESSION_LIFETIME = 600 
-
-
-def cleanup_sessions():
-    current_time = time.time()
-    expired_sessions = [
-        sid for sid, data in _STORE.items()
-        if current_time - data["timestamp"] > SESSION_LIFETIME
-    ]
-    for sid in expired_sessions:
-        del _STORE[sid]
-
-
-def get_session_history(session_id: str) -> BaseChatMessageHistory:
-    cleanup_sessions()
-    if session_id not in _STORE:
-        _STORE[session_id] = {
-            "history": ChatMessageHistory(),
-            "timestamp": time.time()
+def run_chatbot(query: str, history: list) -> str:
+    formatted_history = format_history(history)    
+    result = chat_crew.kickoff(
+        inputs={
+            "query": query,
+            "history": formatted_history
         }
-    else:
-        _STORE[session_id]["timestamp"] = time.time()
-    return _STORE[session_id]["history"]
-
-
-def get_conversational_rag_chain():
-    contextualize_q_system_prompt = """Given a chat history and the latest user question 
-    which might reference context in the chat history, formulate a standalone question 
-    which can be understood without the chat history. Do NOT answer the question, 
-    just reformulate it if needed and otherwise return it as is."""
-    contextualize_q_prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", contextualize_q_system_prompt),
-            MessagesPlaceholder("chat_history"),
-            ("human", "{input}"),
-        ]
     )
-
-    llm = get_llm()
-
-    history_aware_retriever = create_history_aware_retriever(
-        llm, retriever, contextualize_q_prompt
-    )
-
-    qa_system_prompt = """You are a friendly and professional financial chatbot specializing in stocks and finance. Your purpose is to educate and inform users based on the information provided in the context. 
-    When a user asks a question, please follow these guidelines:
-    - Answer Directly: Use the provided context to answer the question clearly and concisely.
-    - If the question is unrelated to stocks or finance, politely inform the user that you can only assist with finance-related queries.
-    - Be Helpful: If the answer is not in the context, gently state that you don't have that specific information.
-    - Stay in Character: Maintain a professional but approachable tone. Avoid jargon where possible, or explain it simply.
-    \n\n{context}"""
-    qa_prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", qa_system_prompt),
-            MessagesPlaceholder("chat_history"),
-            ("human", "{input}"),
-        ]
-    )
-
-    question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
-    rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
-
-    conversational_rag_chain = RunnableWithMessageHistory(
-        rag_chain,
-        get_session_history,
-        input_messages_key="input",
-        history_messages_key="chat_history",
-        output_messages_key="answer",
-    )
-
-    return conversational_rag_chain
-
-
-def get_rag_response(query: str, session_id: str):
-    conversational_rag_chain = get_conversational_rag_chain()
-    response = conversational_rag_chain.invoke(
-        {"input": query},
-        config={"configurable": {"session_id": session_id}}
-    )
-    print(response)
-    return response["answer"]
+    return result.raw.strip()

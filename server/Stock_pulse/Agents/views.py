@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from langchain_community.tools import YouTubeSearchTool
 from .Crews.crews import StockCrews
-from .utils import get_rag_response
+from .utils import run_chatbot
 from .serializers import (
     ChatQueryRequestSerializer,
     ChatQueryResponseSerializer,
@@ -53,12 +53,18 @@ class StockPortfolioAnalysisView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         portfolio_tickers = serializer.validated_data['portfolio_tickers']
+        portfolio_stocks = serializer.validated_data['portfolio_stocks']
+        trader_profile = serializer.validated_data['trader_profile']
 
         try:
             crew = StockCrews().PortfolioCrew()
-            tickers = portfolio_tickers
-
-            result = crew.kickoff(inputs={"portfolio_tickers": tickers})
+            result = crew.kickoff(
+                inputs={
+                    "portfolio_tickers": portfolio_tickers,
+                    "portfolio_stocks": portfolio_stocks,
+                    "trader_profile": trader_profile,
+                }
+            )
 
             response_data = {"summary": result.raw}
 
@@ -107,14 +113,15 @@ class ChatBotView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         query = serializer.validated_data["query"]
-        session_id = serializer.validated_data["session_id"]
+        history_data = serializer.validated_data.get("history") or []
+        history = [
+            {"role": msg["role"], "content": msg["content"]}
+            for msg in history_data
+        ]
 
         try:
-            answer = get_rag_response(query, session_id)
-            response_data = {
-                "session_id": session_id,
-                "answer": answer,
-            }
+            answer = run_chatbot(query, history)
+            response_data = {"answer": answer}
             response_serializer = ChatQueryResponseSerializer(response_data)
             return Response(response_serializer.data, status=status.HTTP_200_OK)
         except Exception as e:

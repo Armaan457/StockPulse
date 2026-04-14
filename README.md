@@ -13,8 +13,8 @@ An all in one stock market analysis platform that combines AI powered insights w
 
 - **Frontend**: Next 
 - **Backend**: Django REST Framework
-- **Database**: PostgreSQL and Pinecone
-- **AI/ML**: CrewAI and LangChain
+- **Database**: PostgreSQL
+- **AI/ML**: CrewAI
 
 ## Setup
 
@@ -71,5 +71,3 @@ An all in one stock market analysis platform that combines AI powered insights w
 - [Lakshay Sawhney](https://github.com/lakshaysawhney)
 - [Yajat Pahuja](https://github.com/yajatpahuja) 
 - [Himanish Puri](https://github.com/himanishpuri)
-
-Built during the brAInwave hackathon by AIMS-DTU in 2024.
