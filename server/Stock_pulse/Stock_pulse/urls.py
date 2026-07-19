@@ -16,8 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from InvestmentSection.views import PortfolioPerformanceView , TopStocksView
-from NewsSection.views import ChatSessionView 
+from InvestmentSection.views import PortfolioPerformanceView
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularSwaggerView,
@@ -26,10 +25,7 @@ from drf_spectacular.views import (
 urlpatterns = [
     path('auth/', include('Auth.urls')),
     path('admin/', admin.site.urls),
-    path('backtesting/' , PortfolioPerformanceView.as_view()),
-    path("top-stocks/" , TopStocksView.as_view()),
     path('NewsSection/', include('NewsSection.urls')),
-    path('Chatsession/' , ChatSessionView.as_view()),
     path('agents/', include('Agents.urls')),
     path('api/investment/', include('InvestmentSection.urls')),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),

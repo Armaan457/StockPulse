@@ -80,7 +80,7 @@ class StockPortfolioAnalysisView(APIView):
 
 
 class VideosView(APIView):    
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
     serializer_class = StocksQueryRequestSerializer
 
     def post(self, request):
@@ -104,7 +104,7 @@ class VideosView(APIView):
 
 
 class ChatBotView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
     serializer_class = ChatQueryRequestSerializer
 
     def post(self, request):

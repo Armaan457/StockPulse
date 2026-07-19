@@ -26,7 +26,7 @@ def get_stock_with_indicators(ticker: str, period: str = "1mo", interval: str = 
     """
 
     try:
-        df = yf.download(ticker, period=period, interval=interval)
+        df = yf.download(ticker, period=period, interval=interval, progress=False)
         df = df.dropna()
         df['SMA_20'] = df['Close'].rolling(window=20).mean()
         df['SMA_50'] = df['Close'].rolling(window=50).mean()
@@ -124,7 +124,7 @@ def get_portfolio_with_indicators(portfolio: List[str], period: str = "1mo", int
     results = {}
     for ticker in portfolio:
         try:
-            df = yf.download(ticker, period=period, interval=interval)
+            df = yf.download(ticker, period=period, interval=interval, progress=False)
             df = df.dropna()
             df['SMA_20'] = df['Close'].rolling(window=20).mean()
             df['SMA_50'] = df['Close'].rolling(window=50).mean()
