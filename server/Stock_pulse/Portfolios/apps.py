@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class NewssectionConfig(AppConfig):
+class PortfoliosConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'NewsSection'
+    name = 'Portfolios'

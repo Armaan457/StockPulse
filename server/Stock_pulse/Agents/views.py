@@ -52,17 +52,14 @@ class StockPortfolioAnalysisView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        portfolio_tickers = serializer.validated_data['portfolio_tickers']
-        portfolio_stocks = serializer.validated_data['portfolio_stocks']
-        trader_profile = serializer.validated_data['trader_profile']
+        validated_data = serializer.validated_data
 
         try:
             crew = StockCrews().PortfolioCrew()
             result = crew.kickoff(
                 inputs={
-                    "portfolio_tickers": portfolio_tickers,
-                    "portfolio_stocks": portfolio_stocks,
-                    "trader_profile": trader_profile,
+                    "portfolio_stocks": validated_data["portfolio_stocks"],
+                    "trader_profile": validated_data["trader_profile"],
                 }
             )
 

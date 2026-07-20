@@ -2,7 +2,6 @@ from django.shortcuts import render
 # from Stock_pulse.tasks import download_nasdaq_data
 # Create your views here.
 from rest_framework import generics, permissions
-from rest_framework.response import Response
 from .models import Portfolio
 from .serializers import PortfolioSerializer
 

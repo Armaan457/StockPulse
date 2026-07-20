@@ -37,7 +37,7 @@ Prediction:
 
 AnalyzeStocks:
   description: >
-    Act as a concise, data-driven **Financial Analyst**. For the portfolio {portfolio_tickers} with allocations {portfolio_stocks} and trader profile {trader_profile}, use the `get_portfolio_with_indicators` tool to fetch up-to-date price, technical indicators (e.g., RSI, MACD, SMA/EMA), and basic fundamentals (e.g., market cap, P/E, EPS) for each company. Produce a clean report with one section per company containing:
+    Act as a concise, data-driven **Financial Analyst**. For the portfolio holdings {portfolio_stocks} (each item includes a ticker and its allocation) and trader profile {trader_profile}, use the `get_portfolio_with_indicators` tool to fetch up-to-date price, technical indicators (e.g., RSI, MACD, SMA/EMA), and basic fundamentals (e.g., market cap, P/E, EPS) for each company. Produce a clean report with one section per company containing:
       - Key numeric data points (current price, market cap, P/E, EPS).
       - Short-term and medium-term technical signals (RSI value and interpretation, MACD direction/crossover, SMA(50)/SMA(200) relationship, Bollinger Bands).
       - A concise 1-2 sentence interpretation of the company's current financial/technical stance and a single-line risk note (e.g., "High volatility", "Stable earnings").
@@ -48,7 +48,7 @@ AnalyzeStocks:
 
 GetPortfolioNews:
   description: >
-    Act as a focused **Market News Reporter**. For {portfolio_tickers} with trader profile {trader_profile}, use `get_portfolio_news_summaries` tool to retrieve up to the most recent 3-4 relevant items per ticker (headlines + brief summary). For each company:
+    Act as a focused **Market News Reporter**. For the portfolio holdings {portfolio_stocks} and trader profile {trader_profile}, use `get_portfolio_news_summaries` tool to retrieve up to the most recent 3-4 relevant items per ticker (headlines + brief summary). For each company:
       - Keep only directly relevant items (filter out unrelated mentions).
       - Classify each item as Positive / Negative / Neutral and give a one-line rationale.
       - Assign an impact level (High / Medium / Low) for the stock price or sentiment.
@@ -61,7 +61,7 @@ GetPortfolioNews:
 
 EvaluateDiversity:
   description: >
-    Act as a practical **Diversity Assessor** for the portfolio {portfolio_tickers} with allocations {portfolio_stocks} and trader profile {trader_profile}. Using available metadata (sector, country, market cap, asset class) compute a portfolio diversity assessment. Deliver:
+    Act as a practical **Diversity Assessor** for the portfolio holdings {portfolio_stocks} and trader profile {trader_profile}. Each holding includes a ticker and allocation. Using available metadata (sector, country, market cap, asset class) compute a portfolio diversity assessment. Deliver:
       - Breakdowns by sector, country, and market-cap bands.
       - Concrete, actionable rebalancing suggestions (simple trades to reduce concentration with examples).
     Keep suggestions realistic and framed as lightweight, implementable steps (no more than 3 suggested moves).
@@ -71,7 +71,7 @@ EvaluateDiversity:
 
 GeneratePortfolioReport:
   description: >
-    Act as the portfolio-level **Strategist**. Combine the outputs from AnalyzeStocks, GetPortfolioNews, and EvaluateDiversity into a single, actionable portfolio report for trader profile {trader_profile} and portfolio allocations {portfolio_stocks}. The deliverable should include:
+    Act as the portfolio-level **Strategist**. Combine the outputs from AnalyzeStocks, GetPortfolioNews, and EvaluateDiversity into a single, actionable portfolio report for trader profile {trader_profile} and portfolio holdings {portfolio_stocks}. Each holding includes its ticker and allocation. The deliverable should include:
       - An Executive Summary (2-4 sentences) stating the portfolio's overall stance and top risks/opportunities.
       - Portfolio-level metrics (aggregate market cap, overall sentiment summary and technical summary).
       - For each company: a one-line verdict and a 1-2 sentence justification referencing technicals, fundamentals, and news.

@@ -25,9 +25,9 @@ from drf_spectacular.views import (
 urlpatterns = [
     path('auth/', include('Auth.urls')),
     path('admin/', admin.site.urls),
-    path('NewsSection/', include('NewsSection.urls')),
+    path('Portfolios/', include('Portfolios.urls')),
     path('agents/', include('Agents.urls')),
-    path('api/investment/', include('InvestmentSection.urls')),
-    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
-    path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path('investment/', include('InvestmentSection.urls')),
+    path("schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
 ]
