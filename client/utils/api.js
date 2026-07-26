@@ -52,8 +52,24 @@ class ApiClient {
   getWebSocketUrl(endpoint) {
     const isHttps = BASE_URL.startsWith('https:');
     const wsProtocol = isHttps ? 'wss:' : 'ws:';
-    const host = BASE_URL.replace(/^https?:\/\//, '');
-    return `${wsProtocol}//${host}${endpoint}`;
+    
+    // Extract host and port from BASE_URL
+    const baseUrlHost = BASE_URL.replace(/^https?:\/\//, '');
+    let finalHost = baseUrlHost;
+    
+    // If running locally, match the browser's hostname to prevent CORS/Shield blocks
+    if (typeof window !== 'undefined' && window.location) {
+      const browserHost = window.location.hostname;
+      const isLocal = browserHost === 'localhost' || browserHost === '127.0.0.1' || browserHost === '0.0.0.0';
+      
+      if (isLocal) {
+        const portMatch = BASE_URL.match(/:(\d+)/);
+        const port = portMatch ? portMatch[1] : '';
+        finalHost = port ? `${browserHost}:${port}` : browserHost;
+      }
+    }
+    
+    return `${wsProtocol}//${finalHost}${endpoint}`;
   }
 
   async request(endpoint, options = {}) {

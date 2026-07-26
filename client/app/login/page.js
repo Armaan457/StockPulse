@@ -194,8 +194,8 @@ export default function LoginPage() {
           color: var(--text-muted);
         }
 
-        .input-with-icon :global(.form-input) {
-          padding-left: 44px;
+        .input-with-icon .form-input {
+          padding-left: 48px;
         }
 
         .login-btn {

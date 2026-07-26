@@ -316,10 +316,11 @@ export default function ChatPage() {
         }
 
         .user .message-bubble {
-          background: var(--primary);
-          color: #fff;
+          background: rgba(0, 230, 118, 0.08);
+          border: 1px solid var(--primary);
+          color: #ffffff;
           border-top-right-radius: 2px;
-          box-shadow: 0 4px 12px var(--primary-glow);
+          box-shadow: 0 4px 12px rgba(0, 230, 118, 0.15);
         }
 
         .assistant .message-bubble {

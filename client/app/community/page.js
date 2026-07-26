@@ -55,13 +55,17 @@ export default function CommunityPage() {
       const wsUrl = api.getWebSocketUrl('/ws/community/');
       console.log('Connecting to WebSocket URL:', wsUrl);
       const socket = new WebSocket(wsUrl);
+      socketRef.current = socket;
 
       socket.onopen = () => {
-        setStatus('connected');
-        console.log('WebSocket Connected to Community Forum');
+        if (socketRef.current === socket) {
+          setStatus('connected');
+          console.log('WebSocket Connected to Community Forum');
+        }
       };
 
       socket.onmessage = (event) => {
+        if (socketRef.current !== socket) return;
         try {
           const data = JSON.parse(event.data);
           let parsedPayload;
@@ -85,16 +89,18 @@ export default function CommunityPage() {
       };
 
       socket.onclose = () => {
-        setStatus('disconnected');
-        console.log('WebSocket Disconnected');
+        if (socketRef.current === socket) {
+          setStatus('disconnected');
+          console.log('WebSocket Disconnected');
+        }
       };
 
       socket.onerror = (err) => {
-        console.error('WebSocket Error', err);
-        setStatus('disconnected');
+        if (socketRef.current === socket) {
+          console.error('WebSocket Error', err);
+          setStatus('disconnected');
+        }
       };
-
-      socketRef.current = socket;
     } catch (e) {
       console.error('WebSocket Connection Failed', e);
       setStatus('disconnected');

@@ -131,16 +131,100 @@ export default function AnalyzerPage() {
     }
   };
 
-  const handleDownloadReport = () => {
+  const handleDownloadPDF = () => {
     if (!report) return;
-    const blob = new Blob([report], { type: 'text/markdown;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'portfolio_analysis_report.md');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    
+    const printWindow = window.open('', '_blank');
+    
+    const formatMarkdownToHtml = (markdown) => {
+      let html = markdown;
+      html = html.replace(/^# (.*?)$/gm, '<h1>$1</h1>');
+      html = html.replace(/^## (.*?)$/gm, '<h2>$1</h2>');
+      html = html.replace(/^### (.*?)$/gm, '<h3>$1</h3>');
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/`(.*?)`/g, '<code style="background:#f4f4f4;padding:2px 4px;border-radius:4px;font-family:monospace;">$1</code>');
+      html = html.replace(/^[-*] (.*?)$/gm, '<li>$1</li>');
+      
+      return html.split('\n').map(p => {
+        const trimmed = p.trim();
+        if (trimmed.startsWith('<h') || trimmed.startsWith('<li') || trimmed.startsWith('<ul')) {
+          return p;
+        }
+        if (trimmed === '') return '';
+        return `<p>${p}</p>`;
+      }).join('\n');
+    };
+
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>StockPulse Portfolio Analysis Report</title>
+          <style>
+            @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap');
+            body {
+              font-family: 'Outfit', sans-serif;
+              color: #1a1a1a;
+              line-height: 1.6;
+              padding: 40px;
+              background: #ffffff;
+            }
+            .report-header {
+              border-bottom: 2px solid #00e676;
+              padding-bottom: 12px;
+              margin-bottom: 24px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            }
+            .report-logo {
+              font-size: 1.4rem;
+              font-weight: 800;
+              color: #000000;
+            }
+            .report-date {
+              font-size: 0.85rem;
+              color: #666;
+            }
+            h1 { font-size: 1.6rem; margin-top: 0; color: #000; }
+            h2 { font-size: 1.3rem; margin-top: 20px; color: #111; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+            h3 { font-size: 1.1rem; margin-top: 16px; color: #222; }
+            p { margin-bottom: 10px; font-size: 0.9rem; color: #333; }
+            li { margin-bottom: 4px; font-size: 0.9rem; color: #333; }
+            strong { color: #00e676; font-weight: 600; }
+            .footer {
+              margin-top: 40px;
+              border-top: 1px solid #eee;
+              padding-top: 10px;
+              font-size: 0.75rem;
+              color: #888;
+              text-align: center;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="report-header">
+            <div class="report-logo">STOCK<span style="color:#00e676;">PULSE</span> AI</div>
+            <div class="report-date">Generated: ${new Date().toLocaleDateString()}</div>
+          </div>
+          
+          <div class="report-body">
+            ${formatMarkdownToHtml(report)}
+          </div>
+          
+          <div class="footer">
+            StockPulse AI Portfolio Analyzer &bull; Confidential Report
+          </div>
+          
+          <script>
+            window.onload = function() {
+              window.print();
+              setTimeout(function() { window.close(); }, 500);
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
   };
 
   const totalAlloc = calculateTotalAllocation();
