@@ -1,149 +1,229 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  /* Updated color tokens for fintech theme with green primary and professional neutrals */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.25 0 0);
-  --card: oklch(0.98 0.01 142);
-  --card-foreground: oklch(0.25 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.25 0 0);
-  --primary: oklch(0.45 0.15 142);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.25 0 0);
-  --secondary-foreground: oklch(0.98 0.01 142);
-  --muted: oklch(0.98 0.01 142);
-  --muted-foreground: oklch(0.25 0 0);
-  --accent: oklch(0.65 0.18 120);
-  --accent-foreground: oklch(0.25 0 0);
-  --destructive: oklch(0.55 0.25 25);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.9 0 0);
-  --input: oklch(0.98 0.01 142);
-  --ring: oklch(0.45 0.15 142 / 0.5);
-  --chart-1: oklch(0.45 0.15 142);
-  --chart-2: oklch(0.55 0.25 25);
-  --chart-3: oklch(0.55 0.2 60);
-  --chart-4: oklch(0.6 0.15 320);
-  --chart-5: oklch(0.4 0 0);
-  --radius: 0.5rem;
-  --sidebar: oklch(0.98 0.01 142);
-  --sidebar-foreground: oklch(0.25 0 0);
-  --sidebar-primary: oklch(0.45 0.15 142);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.65 0.18 120);
-  --sidebar-accent-foreground: oklch(0.25 0 0);
-  --sidebar-border: oklch(0.9 0 0);
-  --sidebar-ring: oklch(0.45 0.15 142 / 0.5);
-
-  /* Added fintech-specific color tokens for gains/losses */
-  --success: oklch(0.45 0.15 142);
-  --success-foreground: oklch(1 0 0);
-  --warning: oklch(0.7 0.15 85);
-  --warning-foreground: oklch(0.25 0 0);
-  --loss: oklch(0.55 0.25 25);
-  --loss-foreground: oklch(1 0 0);
+  --font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  
+  /* HSL Color System - Green & Black Style */
+  --bg-main: #000000;
+  --bg-surface: #090d0b;
+  --bg-surface-hover: #121a16;
+  --bg-surface-glass: rgba(9, 13, 11, 0.85);
+  
+  --primary: #00e676; /* Bright fluorescent green */
+  --primary-glow: rgba(0, 230, 118, 0.2);
+  
+  --success: #00ff66;
+  --success-glow: rgba(0, 255, 102, 0.15);
+  
+  --danger: #ff3366; /* Clean red for contrast */
+  --danger-glow: rgba(255, 51, 102, 0.15);
+  
+  --warning: #ffd600;
+  --warning-glow: rgba(255, 214, 0, 0.15);
+  
+  --border: rgba(0, 230, 118, 0.12); /* Subtle green border */
+  --border-focus: rgba(0, 230, 118, 0.5);
+  
+  --text-primary: #ffffff;
+  --text-secondary: #a0aec0;
+  --text-muted: #718096;
+  
+  --glass-blur: 20px;
+  --shadow-glow: 0 0 25px rgba(0, 230, 118, 0.15);
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.dark {
-  /* Updated dark mode tokens for professional fintech appearance */
-  --background: oklch(0.08 0 0);
-  --foreground: oklch(0.95 0 0);
-  --card: oklch(0.12 0 0);
-  --card-foreground: oklch(0.95 0 0);
-  --popover: oklch(0.12 0 0);
-  --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.55 0.18 142);
-  --primary-foreground: oklch(0.08 0 0);
-  --secondary: oklch(0.18 0 0);
-  --secondary-foreground: oklch(0.95 0 0);
-  --muted: oklch(0.18 0 0);
-  --muted-foreground: oklch(0.7 0 0);
-  --accent: oklch(0.65 0.18 120);
-  --accent-foreground: oklch(0.08 0 0);
-  --destructive: oklch(0.6 0.25 25);
-  --destructive-foreground: oklch(0.95 0 0);
-  --border: oklch(0.18 0 0);
-  --input: oklch(0.18 0 0);
-  --ring: oklch(0.55 0.18 142 / 0.5);
-  --chart-1: oklch(0.55 0.18 142);
-  --chart-2: oklch(0.6 0.25 25);
-  --chart-3: oklch(0.65 0.2 60);
-  --chart-4: oklch(0.65 0.15 320);
-  --chart-5: oklch(0.6 0 0);
-  --sidebar: oklch(0.1 0 0);
-  --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.55 0.18 142);
-  --sidebar-primary-foreground: oklch(0.08 0 0);
-  --sidebar-accent: oklch(0.65 0.18 120);
-  --sidebar-accent-foreground: oklch(0.08 0 0);
-  --sidebar-border: oklch(0.18 0 0);
-  --sidebar-ring: oklch(0.55 0.18 142 / 0.5);
-
-  /* Dark mode fintech-specific tokens */
-  --success: oklch(0.55 0.18 142);
-  --success-foreground: oklch(0.08 0 0);
-  --warning: oklch(0.7 0.15 85);
-  --warning-foreground: oklch(0.08 0 0);
-  --loss: oklch(0.6 0.25 25);
-  --loss-foreground: oklch(0.95 0 0);
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-
-  /* Added fintech-specific color utilities */
-  --color-success: var(--success);
-  --color-success-foreground: var(--success-foreground);
-  --color-warning: var(--warning);
-  --color-warning-foreground: var(--warning-foreground);
-  --color-loss: var(--loss);
-  --color-loss-foreground: var(--loss-foreground);
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+input, select, textarea, button {
+  font-family: inherit;
+  color: inherit;
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
   }
-  body {
-    @apply bg-background text-foreground;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(0, 230, 118, 0.08);
+    border-color: rgba(0, 230, 118, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(0, 230, 118, 0.25);
+    border-color: rgba(0, 230, 118, 0.3);
+  }
+}
+
+/* Global Utility Classes */
+.animate-fade-in {
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Glassmorphism Panels */
+.glass-panel {
+  background: var(--bg-surface-glass);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.glass-panel:hover {
+  border-color: rgba(0, 230, 118, 0.25);
+}
+
+.glass-panel-glow {
+  animation: glowPulse 4s infinite ease-in-out;
+}
+
+/* Inputs & Buttons styling */
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--primary);
+  background: rgba(0, 230, 118, 0.05);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--primary);
+  color: #000000; /* Dark text on bright background for readability */
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 14px var(--primary-glow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 230, 118, 0.5);
+  background: #26ff91;
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  background: var(--text-muted);
+  color: rgba(0, 0, 0, 0.5);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(0, 230, 118, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 600;
+  color: var(--primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-secondary:hover {
+  background: rgba(0, 230, 118, 0.12);
+  border-color: var(--primary);
+}
+
+/* Color Badges */
+.badge-up {
+  background: var(--success-glow);
+  color: var(--success);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: 1px solid rgba(0, 255, 102, 0.2);
+}
+
+.badge-down {
+  background: var(--danger-glow);
+  color: var(--danger);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255, 51, 102, 0.2);
+}
+
+.badge-stable {
+  background: var(--warning-glow);
+  color: var(--warning);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255, 214, 0, 0.2);
 }

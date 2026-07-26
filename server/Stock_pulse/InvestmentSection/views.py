@@ -36,7 +36,7 @@ class PortfolioPerformanceView(APIView):
         weights = [amount / total_investment for amount in amounts]
         tickers = companies
 
-        start_date = '2015-01-01'
+        start_date = request.query_params.get('start_date', '2015-01-01')
         end_date = request.query_params.get(
             'end_date',
             datetime.today().strftime('%Y-%m-%d')
