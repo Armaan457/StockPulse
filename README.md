@@ -1,22 +1,54 @@
-# StockPulse
+# 📈 StockPulse
 
-An all in one stock market analysis platform that combines AI powered insights with comprehensive tools for informed investment decisions.
+StockPulse is an AI-powered market analysis platform that helps users analyze portfolios, explore market trends, and make informed investment decisions through interactive tools and real-time insights.
 
-## Features
+---
 
-- **Stock Analysis & Predictions:** In-depth portfolio analysis with AI-powered market predictions
-- **Dual-Layer Analysis:** Combines sentiment analysis of market news with quantitative backtesting
-- **Learning Hub:** Personalized educational resources for investment strategies
-- **Community Forum:** Connect and discuss with fellow investors
+## Core Features
+
+### 1. AI Portfolio Analyzer
+
+* Assesss portfolio allocations across multiple risk profiles (*Conservative, Moderate, Aggressive, Speculative,* and *Hedged*).
+* Automatically validates portfolio weights and highlights potential risk exposures.
+* Export detailed portfolio analysis as a PDF report.
+
+### 2. Market Trends & Forecasts
+
+* Explore top-performing stocks and market trends across multiple time periods (*1d, 5d, 1mo, 3mo,* and *1y*).
+* Receive AI-generated forecasts with supporting market analysis (*RISE, FALL,* or *STABLE*).
+
+### 3. Financial Video Explorer
+
+* Search for investment tutorials and market updates independently of the analysis dashboard.
+* Browse results in a clean, thumbnail-based video gallery.
+
+### 4. AI Financial Assistant
+
+* Ask finance-related questions through a context-aware chat assistant.
+* Use quick prompts for common portfolio and investment queries.
+
+### 5. Community Forum
+
+* Join live discussions with other investors through a real-time chat feed.
+* View connection status with automatic reconnection support.
+
+### 6. Portfolio Backtesting
+
+* Add, edit, and manage portfolio holdings with ease.
+* Compare historical portfolio performance using a customizable start date using buy-and-hold, fixed-weight strategy.
+
 
 ## Tech Stack
 
-- **Frontend**: Next 
-- **Backend**: Django REST Framework
-- **Database**: PostgreSQL
-- **AI/ML**: CrewAI
+* **Frontend:** Next.js
+* **Backend:** Django REST Framework
+* **Database:** PostgreSQL
+* **AI/ML:** CrewAI
+* **Data:** FinnHub API, yFinance, youtube-search
 
-## Setup
+
+
+## Installation & Setup
 
 ### Backend
 1. Navigate to server directory:
@@ -38,15 +70,25 @@ An all in one stock market analysis platform that combines AI powered insights w
    ```bash
    pip install -r requirements.txt
    ```
+4. Configure Environment Variables
+   - **macOS/Linux:**
+        ```bash
+        cp .env.example .env   
+        ```
+   - **Windows:**
+     ```bash
+     copy .env.example .env
+     ```
 
-4. Run migrations:
+5. Run migrations:
    ```bash
+   cd Stock_pulse
    python manage.py migrate
    ```
 
-5. Start  server:
+6. Start  server:
    ```bash
-   python manage.py runserver
+   uvicorn Stock_pulse.asgi:application --port 8000
    ```
 
 ### Frontend

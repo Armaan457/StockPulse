@@ -232,7 +232,6 @@ export default function DashboardPage() {
           tasks={[
             "Connecting to StockPulse secure database...",
             "Loading active user stock ticker records...",
-            "Requesting closing prices from Yahoo Finance API...",
             "Aggregating portfolio allocation weight indices...",
             "Computing backtested daily return logs...",
             "Finalizing portfolio dashboard view..."
