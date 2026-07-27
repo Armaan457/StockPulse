@@ -1,6 +1,27 @@
-from crewai import Task, Crew, Agent, LLM
 import os
+os.environ["LITELLM_DROP_PARAMS"] = "True"
+
+from crewai import Task, Crew, Agent, LLM
 from dotenv import load_dotenv
+import litellm
+
+# Patch litellm.completion to strip out unsupported prompt caching keys (cache_breakpoint) before sending requests to Groq
+if not hasattr(litellm, "_original_completion_patched"):
+    litellm._original_completion_patched = True
+    _original_completion = litellm.completion
+
+    def _patched_completion(*args, **kwargs):
+        if "messages" in kwargs and isinstance(kwargs["messages"], list):
+            for msg in kwargs["messages"]:
+                if isinstance(msg, dict):
+                    msg.pop("cache_breakpoint", None)
+                    msg.pop("cache_control", None)
+        return _original_completion(*args, **kwargs)
+
+    litellm.completion = _patched_completion
+
+# Drop unsupported parameters (like cache_breakpoint) for Groq compatibility
+litellm.drop_params = True
 
 from .Crews.tools import (
     get_company_news_summaries,
@@ -12,6 +33,7 @@ load_dotenv()
 llm = LLM(
     model="groq/llama-3.3-70b-versatile",
     api_key=os.getenv("GROQ_API_KEY"),
+    drop_params=True,
 )
 
 chatbot_agent = Agent(

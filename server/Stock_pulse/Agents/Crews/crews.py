@@ -1,6 +1,27 @@
 import os
+os.environ["LITELLM_DROP_PARAMS"] = "True"
+
 from pathlib import Path
 from dotenv import load_dotenv
+import litellm
+
+# Patch litellm.completion to strip out unsupported prompt caching keys (cache_breakpoint) before sending requests to Groq
+if not hasattr(litellm, "_original_completion_patched"):
+    litellm._original_completion_patched = True
+    _original_completion = litellm.completion
+
+    def _patched_completion(*args, **kwargs):
+        if "messages" in kwargs and isinstance(kwargs["messages"], list):
+            for msg in kwargs["messages"]:
+                if isinstance(msg, dict):
+                    msg.pop("cache_breakpoint", None)
+                    msg.pop("cache_control", None)
+        return _original_completion(*args, **kwargs)
+
+    litellm.completion = _patched_completion
+
+# Drop unsupported parameters globally for model API compatibility
+litellm.drop_params = True
 
 from crewai import Agent, Crew, Task, Process, LLM
 from crewai.project import CrewBase, agent, crew, task
@@ -18,7 +39,8 @@ load_dotenv()
 llm = LLM(
     model="google/gemini-2.5-flash",
     temperature=0.7,
-    api_key=os.getenv("GOOGLE_API_KEY")
+    api_key=os.getenv("GOOGLE_API_KEY"),
+    drop_params=True,
 )
 
 
