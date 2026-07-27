@@ -79,18 +79,10 @@ StockPulse is an AI-powered market analysis platform that helps users analyze po
    ```bash
    cd server
    ```
-
-2. Configure Environment Variables
-   - **macOS/Linux:**
-        ```bash
-        cp .env.example .env   
-        ```
-   - **Windows:**
-     ```bash
-     copy .env.example .env
-     ```
-
-3. Activate virtual environment:
+2. Creat and activate virtual environment:
+    ```bash
+    python -m venv env
+    ```
    - **macOS/Linux:**
      ```bash
      source env/bin/activate
@@ -100,10 +92,20 @@ StockPulse is an AI-powered market analysis platform that helps users analyze po
      env\Scripts\activate
      ```
 
-4. Install dependencies:
+3. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
+
+4. Configure Environment Variables
+   - **macOS/Linux:**
+        ```bash
+        cp .env.example .env   
+        ```
+   - **Windows:**
+     ```bash
+     copy .env.example .env
+     ```
 
 5. Run migrations:
    ```bash
