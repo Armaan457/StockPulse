@@ -190,7 +190,7 @@ class ApiClient {
         });
       }
     } catch (e) {
-      console.error('Logout request failed', e);
+      console.warn('Logout request failed (server down or offline)', e);
     } finally {
       this.clearTokens();
     }
