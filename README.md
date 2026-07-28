@@ -18,7 +18,7 @@ StockPulse is an AI-powered market analysis platform that helps users analyze po
 
 ### 2. Market Trends & Forecasts
 
-* Explore top-performing stocks and market trends across multiple time periods (*1d, 5d, 1mo, 3mo,* and *1y*).
+* Explore top-performing stocks and market trends across multiple time periods.
 * Receive AI-generated forecasts with supporting market analysis (*RISE, FALL,* or *STABLE*).
 
 <p align="center">
